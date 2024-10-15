@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import HomeScreen from "./components/HomeScreen";
 // Import các component khác nếu cần, ví dụ: Header, Footer
 
@@ -10,7 +15,12 @@ const App = () => {
       {/* <Header /> */}
 
       <Routes>
-        <Route path="/" element={<HomeScreen />} />
+        {/* Route cho HomeScreen với đường dẫn /trang-chu */}
+        <Route path="/trang-chu" element={<HomeScreen />} />
+
+        {/* Route chuyển hướng từ / về /trang-chu */}
+        <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+
         {/* Thêm các route khác ở đây, ví dụ:
             <Route path="/about" element={<AboutScreen />} />
             <Route path="/contact" element={<ContactScreen />} />
