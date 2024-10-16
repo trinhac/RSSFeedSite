@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import he from "he";
+import { ClipLoader } from "react-spinners"; // Import ClipLoader từ react-spinners
 import "./HomeScreen.css";
 
 const HomeScreen = () => {
@@ -16,13 +17,43 @@ const HomeScreen = () => {
     nhanDan: 1,
   });
 
-  const articlesPerPage = 7;
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
+
+  const [articlesPerPage, setArticlesPerPage] = useState(1); // Đã chuyển sang trạng thái
+
+  // Hàm xác định số lượng bài báo mỗi trang dựa trên kích thước màn hình
+  const determineArticlesPerPage = () => {
+    const width = window.innerWidth;
+    if (width >= 1600) return 6; // Desktop rất lớn
+    if (width >= 992) return 4; // Desktop
+    if (width >= 768) return 2; // Tablet
+    return 1; // Mobile
+  };
+
+  useEffect(() => {
+    // Hàm để cập nhật articlesPerPage
+    const updateArticlesPerPage = () => {
+      setArticlesPerPage(determineArticlesPerPage());
+    };
+
+    // Gọi hàm ngay khi component mount
+    updateArticlesPerPage();
+
+    // Thêm event listener cho window resize
+    window.addEventListener("resize", updateArticlesPerPage);
+
+    // Cleanup event listener khi component unmount
+    return () => window.removeEventListener("resize", updateArticlesPerPage);
+  }, []);
 
   useEffect(() => {
     fetchArticles();
   }, []);
 
   const fetchArticles = async () => {
+    setLoading(true); // Bắt đầu tải dữ liệu
+    setError(null); // Reset lỗi trước khi bắt đầu tải dữ liệu
     try {
       const response = await axios.get("http://localhost:3001/getrawxml");
       const data = response.data;
@@ -72,6 +103,9 @@ const HomeScreen = () => {
       setArticles(parsedArticles);
     } catch (error) {
       console.error(error);
+      setError(error.message || "Đã xảy ra lỗi khi tải dữ liệu.");
+    } finally {
+      setLoading(false); // Kết thúc tải dữ liệu
     }
   };
 
@@ -163,40 +197,54 @@ const HomeScreen = () => {
 
   return (
     <div className="home-container">
-      <header className="header">
-        <h1>Diễn Đàn Tin Tức Việt Nam</h1>
-        <nav className="nav">
-          <ul>
-            <li>Thời sự</li>
-            <li>Kinh tế</li>
-            <li>Y tế</li>
-            <li>Pháp luật</li>
-            <li>Đời sống</li>
-            <li>Xã hội</li>
-            <li>Giáo dục</li>
-            <li>Du lịch</li>
-          </ul>
-        </nav>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
+      {loading ? (
+        <div className="loading">
+          <ClipLoader color="#3498db" size={50} />{" "}
+          {/* Spinner từ react-spinners */}
         </div>
-      </header>
+      ) : error ? (
+        <div className="error">
+          <p>Đã xảy ra lỗi: {error}</p>
+          <button onClick={fetchArticles}>Thử lại</button>
+        </div>
+      ) : (
+        <>
+          <header className="header">
+            <h1>Diễn Đàn Tin Tức Việt Nam</h1>
+            <nav className="nav">
+              <ul>
+                <li>Thời sự</li>
+                <li>Kinh tế</li>
+                <li>Y tế</li>
+                <li>Pháp luật</li>
+                <li>Đời sống</li>
+                <li>Xã hội</li>
+                <li>Giáo dục</li>
+                <li>Du lịch</li>
+              </ul>
+            </nav>
+            <div className="search-bar">
+              <input type="text" placeholder="Search..." />
+            </div>
+          </header>
 
-      <NewsList
-        title="Báo Thanh Niên"
-        source="thanhNien"
-        url="https://thanhnien.vn/"
-      />
-      <NewsList
-        title="Báo VnExpress"
-        source="vnExpress"
-        url="https://vnexpress.net/"
-      />
-      <NewsList
-        title="Báo Nhân Dân"
-        source="nhanDan"
-        url="https://nhandan.vn/"
-      />
+          <NewsList
+            title="Báo Thanh Niên"
+            source="thanhNien"
+            url="https://thanhnien.vn/"
+          />
+          <NewsList
+            title="Báo VnExpress"
+            source="vnExpress"
+            url="https://vnexpress.net/"
+          />
+          <NewsList
+            title="Báo Nhân Dân"
+            source="nhanDan"
+            url="https://nhandan.vn/"
+          />
+        </>
+      )}
     </div>
   );
 };
