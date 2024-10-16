@@ -97,13 +97,6 @@
   text-overflow: ellipsis; /* Thêm dấu ba chấm nếu nội dung quá dài */
 }
 
-.card-info span {
-  margin-top: auto; /* Đẩy phần thời gian xuống dưới */
-  margin-left: 60%;
-  font-size: 16px;
-  color: #ffcc00;
-}
-
 .prev-btn,
 .next-btn {
   background-color: #333;
@@ -192,3 +185,20 @@ a:hover {
     grid-template-columns: repeat(6, 1fr); /* 6 cột cho desktop rất lớn */
   }
 }
+
+.card-info-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+.card-info-footer img.article-logo {
+  width: 30%;
+  height: 15%;
+}
+
+.card-info span {
+  font-size: 16px;
+  color: #ffcc00;
+  margin-right: 8%;
+}
+

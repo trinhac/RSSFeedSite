@@ -156,6 +156,19 @@ const HomeScreen = () => {
     }
   };
 
+  const getLogoUrl = (source) => {
+    switch (source) {
+      case "thanhNien":
+        return "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg";
+      case "vnExpress":
+        return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
+      case "nhanDan":
+        return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
+      default:
+        return ""; // Trả về logo mặc định hoặc rỗng
+    }
+  };
+
   const NewsList = ({ title, source, url }) => (
     <section className="list">
       <a href={url}>
@@ -178,7 +191,14 @@ const HomeScreen = () => {
                 </div>
                 <div className="card-info">
                   <h3>{article.title}</h3>
-                  <span>{getTimeDifference(article.pubDate)}</span>
+                  <div className="card-info-footer">
+                    <img
+                      src={getLogoUrl(source)} // Gọi hàm getLogoUrl để lấy logo đúng
+                      alt="Logo"
+                      className="article-logo"
+                    />
+                    <span>{getTimeDifference(article.pubDate)}</span>
+                  </div>
                 </div>
               </a>
             </div>
