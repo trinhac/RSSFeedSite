@@ -5,14 +5,15 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import HomeScreen from "./components/HomeScreen";
-// Import các component khác nếu cần, ví dụ: Header, Footer
+import HomeScreen from "./screens/home/HomeScreen";
+import SearchScreen from "./screens/search/SearchScreen";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
   return (
     <Router>
-      {/* Header có thể đặt ở đây nếu muốn hiển thị trên tất cả các trang */}
-      {/* <Header /> */}
+      <Header />
 
       <Routes>
         {/* Route cho HomeScreen với đường dẫn /trang-chu */}
@@ -21,14 +22,10 @@ const App = () => {
         {/* Route chuyển hướng từ / về /trang-chu */}
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
 
-        {/* Thêm các route khác ở đây, ví dụ:
-            <Route path="/about" element={<AboutScreen />} />
-            <Route path="/contact" element={<ContactScreen />} />
-        */}
+        <Route path="/search" element={<SearchScreen />} />
       </Routes>
 
-      {/* Footer có thể đặt ở đây nếu muốn hiển thị trên tất cả các trang */}
-      {/* <Footer /> */}
+      <Footer />
     </Router>
   );
 };

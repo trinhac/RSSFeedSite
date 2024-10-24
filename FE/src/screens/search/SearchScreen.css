@@ -1,0 +1,46 @@
+/* SearchScreen.css */
+
+.search-screen {
+    padding: 20px;
+  }
+  
+  .articles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .article-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .article-item:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .article-image {
+    max-width: 20%;
+    height: 20%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 1em;
+    color: #333;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  
