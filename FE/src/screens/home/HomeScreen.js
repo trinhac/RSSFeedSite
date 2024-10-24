@@ -25,8 +25,8 @@ const HomeScreen = () => {
   // Hàm xác định số lượng bài báo mỗi trang dựa trên kích thước màn hình
   const determineArticlesPerPage = () => {
     const width = window.innerWidth;
-    if (width >= 1600) return 6; // Desktop rất lớn
-    if (width >= 992) return 4; // Desktop
+    if (width >= 1600) return 5; // Desktop rất lớn
+    if (width >= 900) return 4; // Desktop
     if (width >= 768) return 2; // Tablet
     return 1; // Mobile
   };
@@ -190,7 +190,9 @@ const HomeScreen = () => {
                   <img src={article.imageUrl} alt="Article" />
                 </div>
                 <div className="card-info">
-                  <h3>{article.title}</h3>
+                  <div className="card-info-h3">
+                    <h3>{article.title}</h3>
+                  </div>
                   <div className="card-info-footer">
                     <img
                       src={getLogoUrl(source)} // Gọi hàm getLogoUrl để lấy logo đúng
@@ -229,25 +231,6 @@ const HomeScreen = () => {
         </div>
       ) : (
         <>
-          <header className="header">
-            <h1>Diễn Đàn Tin Tức Việt Nam</h1>
-            <nav className="nav">
-              <ul>
-                <li>Thời sự</li>
-                <li>Kinh tế</li>
-                <li>Y tế</li>
-                <li>Pháp luật</li>
-                <li>Đời sống</li>
-                <li>Xã hội</li>
-                <li>Giáo dục</li>
-                <li>Du lịch</li>
-              </ul>
-            </nav>
-            <div className="search-bar">
-              <input type="text" placeholder="Search..." />
-            </div>
-          </header>
-
           <NewsList
             title="Báo Thanh Niên"
             source="thanhNien"

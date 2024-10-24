@@ -46,28 +46,27 @@ app.get("/getrawxml", async (req, res) => {
   }
 });
 
-// Định nghĩa route GET /articles/category/:category với sort
-app.get("/articles/category/:category", async (req, res) => {
-  const category = req.params.category;
-  const sortField = req.query.sortField || "pubDate"; // Mặc định sắp xếp theo pubDate
-  const sortOrder = req.query.sortOrder === "asc" ? 1 : -1; // asc hoặc desc
-
+app.get("/search", async (req, res) => {
   try {
-    // Tìm các bài báo và sắp xếp theo trường được chọn
-    const articles = await RawXML.find({ articlesCategory: category }).sort({
-      [sortField]: sortOrder,
-    });
+    const keyword = req.query.q; // Lấy từ khóa từ query string (ví dụ: /search?q=ukraine)
 
-    if (articles.length === 0) {
-      return res
-        .status(404)
-        .json({ message: `Không có bài báo nào thuộc thể loại ${category}` });
+    if (!keyword) {
+      return res.status(400).json({ message: "Thiếu từ khóa tìm kiếm" });
     }
 
-    res.status(200).json(articles);
+    // Tìm kiếm trong content của title với từ khóa không phân biệt hoa thường
+    const results = await RawXML.find({
+      content: {
+        $regex: `<title>.*${keyword}.*</title>`,
+        $options: "i", // Không phân biệt chữ hoa/thường
+      },
+    });
+
+    // Trả về toàn bộ các đối tượng có title chứa từ khóa
+    res.status(200).json(results);
   } catch (err) {
-    console.error(`Lỗi khi lấy dữ liệu cho category ${category}:`, err);
-    res.status(500).json({ message: "Lỗi khi lấy dữ liệu từ database" });
+    console.error("Lỗi khi tìm kiếm:", err);
+    res.status(500).json({ message: "Lỗi khi tìm kiếm dữ liệu" });
   }
 });
 
