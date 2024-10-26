@@ -1,8 +1,117 @@
+// HomeScreen.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import he from "he";
-import { ClipLoader } from "react-spinners"; // Import ClipLoader từ react-spinners
+import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
+
+// Component: Hiển thị thông báo lỗi và nút thử lại
+const ErrorMessage = ({ error, onRetry }) => (
+  <div className="error">
+    <p>Đã xảy ra lỗi: {error}</p>
+    <button onClick={onRetry}>Thử lại</button>
+  </div>
+);
+
+// Component: Hiển thị loader khi đang tải dữ liệu
+const LoadingSpinner = () => (
+  <div className="loading">
+    <ClipLoader color="#3498db" size={50} />
+  </div>
+);
+
+// Component: Hiển thị bài viết
+const NewsCard = ({ article, logoUrl, timeDifference }) => (
+  <div className="list-card">
+    <a href={article.link} target="_blank" rel="noreferrer">
+      <div className="card-image">
+        <img src={article.imageUrl} alt="Article" />
+      </div>
+      <div className="card-info">
+        <div className="card-info-h3">
+          <h3>{article.title}</h3>
+        </div>
+        <div className="card-info-footer">
+          <img src={logoUrl} alt="Logo" className="article-logo" />
+          <span>{timeDifference}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+);
+
+// Component: Hiển thị danh sách các bài viết từ từng nguồn báo
+// HomeScreen.js
+const NewsList = ({
+  title,
+  source,
+  url,
+  articles,
+  page,
+  onPageChange,
+  logoUrl,
+}) => {
+  const displayedArticles = articles.slice(
+    (page - 1) * determineArticlesPerPage(),
+    page * determineArticlesPerPage()
+  );
+
+  // Định nghĩa hàm getTimeDifference trong phạm vi của NewsList
+  const getTimeDifference = (pubDate) => {
+    const currentTime = new Date();
+    const publishedTime = new Date(pubDate);
+    const minutesDifference = Math.floor(
+      (currentTime - publishedTime) / (1000 * 60)
+    );
+    const hoursDifference = Math.floor(minutesDifference / 60);
+    return hoursDifference < 1
+      ? `${minutesDifference} phút trước`
+      : `${hoursDifference} giờ trước`;
+  };
+
+  return (
+    <section className="list">
+      <a href={url}>
+        <h2>{title}</h2>
+      </a>
+      <div className="list-container">
+        <button
+          className="prev-btn"
+          onClick={() => onPageChange(source, page - 1)}
+          disabled={page === 1}
+        >
+          &lt;
+        </button>
+        <div className="list-grid">
+          {displayedArticles.map((article, index) => (
+            <NewsCard
+              key={index}
+              article={article}
+              logoUrl={logoUrl}
+              timeDifference={getTimeDifference(article.pubDate)} // Sử dụng hàm getTimeDifference ở đây
+            />
+          ))}
+        </div>
+        <button
+          className="next-btn"
+          onClick={() => onPageChange(source, page + 1)}
+          disabled={page * determineArticlesPerPage() >= articles.length}
+        >
+          &gt;
+        </button>
+      </div>
+    </section>
+  );
+};
+
+// Xác định số lượng bài báo mỗi trang dựa trên kích thước màn hình
+const determineArticlesPerPage = () => {
+  const width = window.innerWidth;
+  if (width >= 1600) return 5;
+  if (width >= 900) return 4;
+  if (width >= 768) return 2;
+  return 1;
+};
 
 const HomeScreen = () => {
   const [articles, setArticles] = useState({
@@ -10,50 +119,21 @@ const HomeScreen = () => {
     vnExpress: [],
     nhanDan: [],
   });
-
   const [page, setPage] = useState({
     thanhNien: 1,
     vnExpress: 1,
     nhanDan: 1,
   });
-
-  const [loading, setLoading] = useState(true); // Trạng thái loading
-  const [error, setError] = useState(null); // Trạng thái lỗi
-
-  const [articlesPerPage, setArticlesPerPage] = useState(1); // Đã chuyển sang trạng thái
-
-  // Hàm xác định số lượng bài báo mỗi trang dựa trên kích thước màn hình
-  const determineArticlesPerPage = () => {
-    const width = window.innerWidth;
-    if (width >= 1600) return 5; // Desktop rất lớn
-    if (width >= 900) return 4; // Desktop
-    if (width >= 768) return 2; // Tablet
-    return 1; // Mobile
-  };
-
-  useEffect(() => {
-    // Hàm để cập nhật articlesPerPage
-    const updateArticlesPerPage = () => {
-      setArticlesPerPage(determineArticlesPerPage());
-    };
-
-    // Gọi hàm ngay khi component mount
-    updateArticlesPerPage();
-
-    // Thêm event listener cho window resize
-    window.addEventListener("resize", updateArticlesPerPage);
-
-    // Cleanup event listener khi component unmount
-    return () => window.removeEventListener("resize", updateArticlesPerPage);
-  }, []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchArticles();
   }, []);
 
   const fetchArticles = async () => {
-    setLoading(true); // Bắt đầu tải dữ liệu
-    setError(null); // Reset lỗi trước khi bắt đầu tải dữ liệu
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get("http://localhost:3001/getrawxml");
       const data = response.data;
@@ -62,20 +142,19 @@ const HomeScreen = () => {
       const parsedArticles = data.reduce(
         (acc, item) => {
           const xmlDoc = parser.parseFromString(item.content, "text/xml");
-          const titleRaw =
-            xmlDoc.getElementsByTagName("title")[0]?.textContent || "No title";
-          const descriptionRaw =
+          const title = he.decode(
+            xmlDoc.getElementsByTagName("title")[0]?.textContent || "No title"
+          );
+          const description = he.decode(
             xmlDoc.getElementsByTagName("description")[0]?.textContent ||
-            "No description";
+              "No description"
+          );
           const pubDate =
             xmlDoc.getElementsByTagName("pubDate")[0]?.textContent || "No date";
-          const title = he.decode(titleRaw);
-          const description = he.decode(descriptionRaw);
           const link =
             xmlDoc.getElementsByTagName("link")[0]?.textContent || "#";
 
           let imageUrl = "";
-
           if (item.url.includes("thanhnien.vn")) {
             const imgMatch = description.match(/<img[^>]+src="([^">]+)"/);
             imageUrl = imgMatch ? imgMatch[1] : "";
@@ -89,72 +168,28 @@ const HomeScreen = () => {
             imageUrl = thumbTag ? thumbTag.textContent : "";
             acc.nhanDan.push({ title, description, pubDate, imageUrl, link });
           }
-
           return acc;
         },
         { thanhNien: [], vnExpress: [], nhanDan: [] }
       );
 
-      // Sắp xếp các bài báo theo thứ tự giảm dần của pubDate
-      parsedArticles.thanhNien = sortArticlesByDate(parsedArticles.thanhNien);
-      parsedArticles.vnExpress = sortArticlesByDate(parsedArticles.vnExpress);
-      parsedArticles.nhanDan = sortArticlesByDate(parsedArticles.nhanDan);
-
-      setArticles(parsedArticles);
+      setArticles({
+        thanhNien: sortArticlesByDate(parsedArticles.thanhNien),
+        vnExpress: sortArticlesByDate(parsedArticles.vnExpress),
+        nhanDan: sortArticlesByDate(parsedArticles.nhanDan),
+      });
     } catch (error) {
-      console.error(error);
       setError(error.message || "Đã xảy ra lỗi khi tải dữ liệu.");
     } finally {
-      setLoading(false); // Kết thúc tải dữ liệu
+      setLoading(false);
     }
   };
 
-  const sortArticlesByDate = (articles) => {
-    return articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-  };
+  const sortArticlesByDate = (articles) =>
+    articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-  const handleNextPage = (source) => {
-    if (page[source] * articlesPerPage < articles[source].length) {
-      setPage((prevState) => ({
-        ...prevState,
-        [source]: prevState[source] + 1,
-      }));
-    }
-  };
-
-  const handlePrevPage = (source) => {
-    if (page[source] > 1) {
-      setPage((prevState) => ({
-        ...prevState,
-        [source]: prevState[source] - 1,
-      }));
-    }
-  };
-
-  const displayedArticles = (source) =>
-    articles[source].slice(
-      (page[source] - 1) * articlesPerPage,
-      page[source] * articlesPerPage
-    );
-
-  const getTimeDifference = (pubDate) => {
-    const currentTime = new Date(); // Thời gian hiện tại
-    const publishedTime = new Date(pubDate); // Chuyển đổi pubDate thành đối tượng Date
-
-    // Tính toán sự chênh lệch thời gian theo milliseconds
-    const timeDifference = currentTime - publishedTime;
-
-    // Chuyển đổi từ milliseconds sang phút và giờ
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-    const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
-
-    // Kiểm tra nếu chênh lệch dưới 1 giờ thì hiển thị phút, ngược lại hiển thị giờ
-    if (hoursDifference < 1) {
-      return `${minutesDifference} phút trước`;
-    } else {
-      return `${hoursDifference} giờ trước`;
-    }
-  };
+  const handlePageChange = (source, newPage) =>
+    setPage((prev) => ({ ...prev, [source]: newPage }));
 
   const getLogoUrl = (source) => {
     switch (source) {
@@ -165,86 +200,44 @@ const HomeScreen = () => {
       case "nhanDan":
         return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
       default:
-        return ""; // Trả về logo mặc định hoặc rỗng
+        return "";
     }
   };
-
-  const NewsList = ({ title, source, url }) => (
-    <section className="list">
-      <a href={url}>
-        <h2>{title}</h2>
-      </a>
-      <div className="list-container">
-        <button
-          className="prev-btn"
-          onClick={() => handlePrevPage(source)}
-          disabled={page[source] === 1}
-        >
-          &lt;
-        </button>
-        <div className="list-grid">
-          {displayedArticles(source).map((article, index) => (
-            <div key={index} className="list-card">
-              <a href={article.link} target="_blank" rel="noreferrer">
-                <div className="card-image">
-                  <img src={article.imageUrl} alt="Article" />
-                </div>
-                <div className="card-info">
-                  <div className="card-info-h3">
-                    <h3>{article.title}</h3>
-                  </div>
-                  <div className="card-info-footer">
-                    <img
-                      src={getLogoUrl(source)} // Gọi hàm getLogoUrl để lấy logo đúng
-                      alt="Logo"
-                      className="article-logo"
-                    />
-                    <span>{getTimeDifference(article.pubDate)}</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          ))}
-        </div>
-        <button
-          className="next-btn"
-          onClick={() => handleNextPage(source)}
-          disabled={page[source] * articlesPerPage >= articles[source].length}
-        >
-          &gt;
-        </button>
-      </div>
-    </section>
-  );
 
   return (
     <div className="home-container">
       {loading ? (
-        <div className="loading">
-          <ClipLoader color="#3498db" size={50} />{" "}
-          {/* Spinner từ react-spinners */}
-        </div>
+        <LoadingSpinner />
       ) : error ? (
-        <div className="error">
-          <p>Đã xảy ra lỗi: {error}</p>
-          <button onClick={fetchArticles}>Thử lại</button>
-        </div>
+        <ErrorMessage error={error} onRetry={fetchArticles} />
       ) : (
         <>
           <NewsList
             title="Báo Thanh Niên"
             source="thanhNien"
             url="https://thanhnien.vn/"
+            articles={articles.thanhNien}
+            page={page.thanhNien}
+            onPageChange={handlePageChange}
+            logoUrl={getLogoUrl("thanhNien")}
           />
           <NewsList
             title="Báo VnExpress"
             source="vnExpress"
             url="https://vnexpress.net/"
+            articles={articles.vnExpress}
+            page={page.vnExpress}
+            onPageChange={handlePageChange}
+            logoUrl={getLogoUrl("vnExpress")}
           />
           <NewsList
             title="Báo Nhân Dân"
             source="nhanDan"
             url="https://nhandan.vn/"
+            articles={articles.nhanDan}
+            page={page.nhanDan}
+            onPageChange={handlePageChange}
+            logoUrl={getLogoUrl("nhanDan")}
           />
         </>
       )}
