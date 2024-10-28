@@ -1,0 +1,113 @@
+/* SearchScreen.css */
+
+.search-screen {
+    padding: 20px;
+  }
+  
+  .articles-list {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2%;
+    padding-bottom: 3%;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  
+  .article-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .article-item:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .article-image {
+
+    border-radius: 8px;
+    width: 30%;
+    height: 250px;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 1em;
+    color: #333;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .article-content {
+    display: flex;
+    align-items: center;
+  }
+  .article-text {
+    margin-left: 1%;
+    margin-bottom: 5%;
+  }
+  
+  .source-logo {
+    width: 100px;
+    height: 30px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center; /* Căn giữa các nút */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    margin: 20px 0; /* Khoảng cách trên và dưới */
+  }
+  
+  .pagination button {
+    background-color: #007bff; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Không có viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    cursor: pointer; /* Hiệu ứng con trỏ */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+  }
+  
+  .pagination button:hover {
+    background-color: #0056b3; /* Màu khi hover */
+  }
+  
+  .pagination button:disabled {
+    background-color: #cccccc; /* Màu nền cho nút bị vô hiệu hóa */
+    cursor: not-allowed; /* Hiệu ứng con trỏ cho nút vô hiệu hóa */
+  }
+  
+  /* CSS cho thông báo không tìm thấy kết quả */
+.no-results {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.no-results:hover {
+  color: #333;
+  background-color: #f1f1f1;
+  transform: scale(1.02);
+}
+
+.no-results-icon {
+  font-size: 3rem;
+  color: #888;
+  margin-bottom: 10px;
+}
