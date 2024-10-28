@@ -5,16 +5,20 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./xml_rss_downloader.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0",
+    "he": "^1.2.0",
+    "html-entities": "^2.5.2",
     "mongodb": "^6.9.0",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
-    "rss-downloader": "file:",
+    "puppeteer": "^23.5.0",
     "xml2js": "^0.6.2"
   }
 }

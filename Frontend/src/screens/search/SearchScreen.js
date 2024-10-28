@@ -1,67 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import he from "he";
 import "./SearchScreen.css";
 
 const SearchScreen = () => {
   const location = useLocation();
   const searchResults = location.state?.searchResults || [];
-  const parser = new DOMParser();
 
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedResults, setSortedResults] = useState([]);
   const articlesPerPage = 8;
 
-  // Hàm con để sắp xếp các bài viết theo ngày
+  // Function to sort articles by date
   const sortArticlesByDate = (articles) => {
     return articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
   };
 
-  // Hàm con để lấy URL của logo nguồn tin
+  // Function to get the logo URL of the source
   const getLogoUrl = (source) => {
-    switch (source) {
-      case "thanhNien":
-        return "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg";
-      case "vnExpress":
-        return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
-      case "nhanDan":
-        return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
-      default:
-        return "";
+    if (/thanhnien\.vn/.test(source)) {
+      return "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg";
+    } else if (/vnexpress\.net/.test(source)) {
+      return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
+    } else if (/nhandan\.vn/.test(source)) {
+      return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
+    } else {
+      return "";
     }
   };
+  
 
-  // Hàm con để xử lý và phân tích nội dung từng bài viết
+  // Function to process each article from JSON data
   const parseArticles = (item) => {
-    const xmlDoc = parser.parseFromString(item.content, "text/xml");
-    const titleRaw =
-      xmlDoc.getElementsByTagName("title")[0]?.textContent || "No title";
-    const descriptionRaw =
-      xmlDoc.getElementsByTagName("description")[0]?.textContent ||
-      "No description";
-    const pubDate =
-      xmlDoc.getElementsByTagName("pubDate")[0]?.textContent || "No date";
-    const title = he.decode(titleRaw);
-    const description = he.decode(descriptionRaw);
-    const link = xmlDoc.getElementsByTagName("link")[0]?.textContent || "#";
-
-    let imageUrl = "";
-    let sourceLogo = "";
-
-    if (item.url.includes("thanhnien.vn")) {
-      const imgMatch = description.match(/<img[^>]+src="([^">]+)"/);
-      imageUrl = imgMatch ? imgMatch[1] : "";
-      sourceLogo = getLogoUrl("thanhNien");
-    } else if (item.url.includes("vnexpress.net")) {
-      const enclosureTag = xmlDoc.getElementsByTagName("enclosure")[0];
-      imageUrl = enclosureTag ? enclosureTag.getAttribute("url") : "";
-      sourceLogo = getLogoUrl("vnExpress");
-    } else if (item.url.includes("nhandan.vn")) {
-      const thumbTag = xmlDoc.getElementsByTagName("thumb")[0];
-      imageUrl = thumbTag ? thumbTag.textContent : "";
-      sourceLogo = getLogoUrl("nhanDan");
-    }
+    const title = item.title || "No title";
+    const description = item.description || "No description";
+    const pubDate = item.pubDate || "No date";
+    const link = item.link || "#";
+    const imageUrl = item.enclosure?.url || ""; // assumes image URL is in `enclosure`
+    const sourceLogo = getLogoUrl(item.link);
 
     return { title, description, pubDate, imageUrl, link, sourceLogo };
   };
@@ -81,36 +57,25 @@ const SearchScreen = () => {
   );
   const totalPages = Math.ceil(sortedResults.length / articlesPerPage);
 
-  // Hàm con để điều hướng qua trang kế tiếp
+  // Pagination functions
   const nextPage = () => {
-    if (currentPage < Math.ceil(sortedResults.length / articlesPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  // Hàm con để điều hướng qua trang trước
   const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  // Hàm con để điều hướng qua trang đầu
-  const firstPage = () => {
-    setCurrentPage(1);
-  };
-  // Hàm con để điều hướng qua trang cuối
-  const lastPage = () => {
-    setCurrentPage(totalPages);
-  };
+  const firstPage = () => setCurrentPage(1);
+  const lastPage = () => setCurrentPage(totalPages);
 
-  // Hàm con để định dạng ngày
+  // Date formatting function
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN");
   };
 
-  // Hàm con để hiển thị danh sách bài viết
+  // Article list display
   const ArticleList = () => (
     <div className="articles-list">
       {currentArticles.map((result, index) => (
@@ -141,7 +106,7 @@ const SearchScreen = () => {
     </div>
   );
 
-  // Hàm con để hiển thị thanh phân trang
+  // Pagination component
   const Pagination = () => (
     <div className="pagination">
       <button onClick={firstPage} disabled={currentPage === 1}>
@@ -162,7 +127,7 @@ const SearchScreen = () => {
     </div>
   );
 
-  // Trả về component `SearchScreen` chính với các hàm con đã tạo
+  // Main SearchScreen component
   return (
     <div className="search-screen">
       <h1>Kết quả tìm kiếm</h1>
