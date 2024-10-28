@@ -9,7 +9,7 @@ import HomeScreen from "./screens/home/HomeScreen";
 import SearchScreen from "./screens/search/SearchScreen";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-
+import CategoryArticles from "./screens/category/CategoryArticles";
 const App = () => {
   return (
     <Router>
@@ -21,8 +21,9 @@ const App = () => {
 
         {/* Route chuyển hướng từ / về /trang-chu */}
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
-
+    
         <Route path="/search" element={<SearchScreen />} />
+        <Route path="/category/:category" element={<CategoryArticles />} />
       </Routes>
 
       <Footer />
