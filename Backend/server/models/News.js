@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const newsSchema = new mongoose.Schema({
   url: String,
@@ -8,9 +8,8 @@ const newsSchema = new mongoose.Schema({
   description: String,
   pubDate: String,
   link: String,
-  enclosure: Object,
-  authors: [String],
-  convertedAt: Date
+  img: String,
+  downloadedAt: Date,
 });
 
-module.exports = mongoose.model('News', newsSchema, 'test_json_xml');
+module.exports = mongoose.model("News", newsSchema, "test_json_xml");

@@ -15,7 +15,6 @@
   
   .article-item {
     border: 1px solid #ddd;
-    padding: 10px;
     border-radius: 8px;
     transition: box-shadow 0.3s ease;
   }
@@ -110,4 +109,10 @@
   font-size: 3rem;
   color: #888;
   margin-bottom: 10px;
+}
+
+.article-text p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 17px;
 }
