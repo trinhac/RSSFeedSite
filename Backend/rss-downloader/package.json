@@ -19,6 +19,7 @@
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
     "puppeteer": "^23.5.0",
+    "rss-downloader": "file:",
     "xml2js": "^0.6.2"
   }
 }

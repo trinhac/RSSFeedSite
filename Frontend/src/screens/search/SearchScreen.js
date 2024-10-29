@@ -28,7 +28,6 @@ const SearchScreen = () => {
       return "";
     }
   };
-  
 
   // Function to process each article from JSON data
   const parseArticles = (item) => {
@@ -36,8 +35,8 @@ const SearchScreen = () => {
     const description = item.description || "No description";
     const pubDate = item.pubDate || "No date";
     const link = item.link || "#";
-    const imageUrl = item.enclosure?.url || ""; // assumes image URL is in `enclosure`
-    const sourceLogo = getLogoUrl(item.link);
+    const imageUrl = item.img || "/default-image.jpg"; // Sử dụng `img` từ dữ liệu hoặc ảnh mặc định
+    const sourceLogo = getLogoUrl(item.url);
 
     return { title, description, pubDate, imageUrl, link, sourceLogo };
   };
@@ -75,6 +74,11 @@ const SearchScreen = () => {
     return date.toLocaleDateString("vi-VN");
   };
 
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return `${text.slice(0, maxLength)}...`;
+  };
+
   // Article list display
   const ArticleList = () => (
     <div className="articles-list">
@@ -92,6 +96,7 @@ const SearchScreen = () => {
               />
               <div className="article-text">
                 <h2>{result.title}</h2>
+                <p>{truncateText(result.description, 150)}</p>
                 <img
                   src={result.sourceLogo}
                   alt="Logo"

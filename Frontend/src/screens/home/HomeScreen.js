@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
-import he from "he";
 import "./HomeScreen.css";
 
 // Component: ErrorMessage
@@ -98,7 +97,7 @@ const getTimeDifference = (pubDate) => {
   const currentTime = new Date();
   const publishedTime = new Date(pubDate);
   const timeDifferenceInMs = currentTime - publishedTime;
-  
+
   const minutesDifference = Math.floor(timeDifferenceInMs / (1000 * 60));
   const hoursDifference = Math.floor(minutesDifference / 60);
   const daysDifference = Math.floor(hoursDifference / 24);
@@ -117,7 +116,6 @@ const getTimeDifference = (pubDate) => {
     return `${minutesDifference} phút trước`;
   }
 };
-
 
 // Calculate articles per page once
 const determineArticlesPerPage = () => {
@@ -146,57 +144,50 @@ const HomeScreen = () => {
     fetchArticles();
   }, []);
 
+  const fetchArticles = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get("http://localhost:5000/api/news/all");
+      const data = response.data;
 
+      const parsedArticles = data.reduce(
+        (acc, item) => {
+          const { title, description, pubDate, link, img, url } = item;
+          const imageUrl = img || "/default-image.jpg"; // Dùng ảnh mặc định nếu không có URL
 
-const fetchArticles = useCallback(async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    const response = await axios.get("http://localhost:5000/api/news/all");
-    const data = response.data;
+          if (url.includes("thanhnien.vn")) {
+            acc.thanhNien.push({ title, description, pubDate, imageUrl, link });
+          } else if (url.includes("vnexpress.net")) {
+            acc.vnExpress.push({ title, description, pubDate, imageUrl, link });
+          } else if (url.includes("nhandan.vn")) {
+            acc.nhanDan.push({ title, description, pubDate, imageUrl, link });
+          }
+          return acc;
+        },
+        { thanhNien: [], vnExpress: [], nhanDan: [] }
+      );
 
-    const parsedArticles = data.reduce(
-      (acc, item) => {
-        const { title, description, pubDate, link, enclosure, url } = item;
-        
-        // Decode HTML entities in title and description
-        const decodedTitle = he.decode(title);
-        const decodedDescription = he.decode(description);
-        const imageUrl = enclosure?.url || "/default-image.jpg"; // Default if no image URL
-
-        if (url.includes("thanhnien.vn")) {
-          acc.thanhNien.push({ title: decodedTitle, description: decodedDescription, pubDate, imageUrl, link });
-        } else if (url.includes("vnexpress.net")) {
-          acc.vnExpress.push({ title: decodedTitle, description: decodedDescription, pubDate, imageUrl, link });
-        } else if (url.includes("nhandan.vn")) {
-          acc.nhanDan.push({ title: decodedTitle, description: decodedDescription, pubDate, imageUrl, link });
-        }
-        return acc;
-      },
-      { thanhNien: [], vnExpress: [], nhanDan: [] }
-    );
-
-    setArticles({
-      thanhNien: sortArticlesByDate(parsedArticles.thanhNien),
-      vnExpress: sortArticlesByDate(parsedArticles.vnExpress),
-      nhanDan: sortArticlesByDate(parsedArticles.nhanDan),
-    });
-  } catch (error) {
-    setError(error.message || "Đã xảy ra lỗi khi tải dữ liệu.");
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
+      setArticles({
+        thanhNien: sortArticlesByDate(parsedArticles.thanhNien),
+        vnExpress: sortArticlesByDate(parsedArticles.vnExpress),
+        nhanDan: sortArticlesByDate(parsedArticles.nhanDan),
+      });
+    } catch (error) {
+      setError(error.message || "Đã xảy ra lỗi khi tải dữ liệu.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const sortArticlesByDate = useCallback(
-    (articles) => articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)),
+    (articles) =>
+      articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)),
     []
   );
 
   const handlePageChange = useCallback(
-    (source, newPage) =>
-      setPage((prev) => ({ ...prev, [source]: newPage })),
+    (source, newPage) => setPage((prev) => ({ ...prev, [source]: newPage })),
     []
   );
 

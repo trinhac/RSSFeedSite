@@ -1,7 +1,8 @@
-import fetch from 'node-fetch';
-import cron from 'node-cron';
-import { MongoClient } from 'mongodb';
-import xml2js from 'xml2js';  // Still used for parsing and extracting items from the RSS feed
+import fetch from "node-fetch";
+import cron from "node-cron";
+import { MongoClient } from "mongodb";
+import xml2js from "xml2js"; // Still used for parsing and extracting items from the RSS feed
+import { decode } from "html-entities";
 
 const uri = process.env.MONGO_URI || "mongodb://localhost:27017";
 const client = new MongoClient(uri);
@@ -18,14 +19,21 @@ async function connectToDB() {
 
 // Function to extract category from the URL (between '/' and '.rss')
 function extractCategory(url) {
-  const match = url.match(/\/([^\/]+)\.rss$/);  // Extract the category from the URL
+  const match = url.match(/\/([^\/]+)\.rss$/); // Extract the category from the URL
   return match ? match[1] : "unknown";
+}
+
+// Hàm để trích xuất văn bản từ description
+function extractTextFromDescription(description) {
+  // Sử dụng regex để loại bỏ các thẻ HTML
+  const textOnly = description.replace(/<\/?[^>]+(>|$)/g, "");
+  // Giải mã các thực thể HTML để có được văn bản thuần túy
+  return decode(textOnly).trim();
 }
 
 // Function to download the RSS feed and store new items in MongoDB
 async function downloadRSS() {
   const rssUrls = [
-
     // Thế giới
     "https://vnexpress.net/rss/the-gioi.rss",
     "https://thanhnien.vn/rss/the-gioi.rss",
@@ -63,52 +71,62 @@ async function downloadRSS() {
     "https://vnexpress.net/rss/giao-duc.rss",
     "https://thanhnien.vn/rss/giao-duc.rss",
     "https://nhandan.vn/rss/giaoduc-1303.rss",
-
-    // Uncategories 
-    "https://nhandan.vn/rss/factcheck-658978.rss",
-    "https://nhandan.vn/rss/moi-truong-1296.rss",
-
-
   ];
 
   try {
     for (const url of rssUrls) {
       const response = await fetch(url);
-      const rssText = await response.text();  // Fetch the raw XML text
+      const rssText = await response.text();
 
-      // Parse the RSS feed to get each <item> tag
       const parser = new xml2js.Parser();
       const rssJson = await parser.parseStringPromise(rssText);
 
-      const articles = rssJson.rss.channel[0].item;  // Extract all items (articles)
-      const db = client.db("rss_feeds");
-      const collection = db.collection("raw_xml");  // Collection to store raw XML for each item
+      const articles = rssJson.rss.channel[0].item;
+      const db = client.db("xml_rss");
+      const collection = db.collection("test_json_xml");
 
-      // Extract the category from the RSS URL
       const articlesCategory = extractCategory(url);
 
-      // Loop through each article (item)
       for (const article of articles) {
-        const articleGuid = article.guid[0] || article.link[0];  // Use 'guid' or 'link' as the unique identifier
-
-        // Check if the article already exists in MongoDB by its 'guid' or 'link'
+        const articleGuid = article.guid[0] || article.link[0];
         const exists = await collection.findOne({ guid: articleGuid });
 
         if (!exists) {
-          // Extract the raw XML for this item
-          const articleXML = new xml2js.Builder().buildObject({ item: article });
+          const title = decode(article.title[0]);
+          const pubDate = article.pubDate[0];
+          const link = article.link[0];
+          const descriptionRaw = article.description[0];
 
-          // Insert the raw XML of the new article into MongoDB  
-          const XMLArticle = {
-            url,                // The RSS URL
-            content: articleXML, // Store the raw XML of this <item>
-            guid: articleGuid,   // Store the unique identifier
-            articlesCategory,    // Store the category extracted from the RSS URL
-            downloadedAt: new Date()  // Timestamp of download
+          // Lấy văn bản từ description
+          const description = extractTextFromDescription(descriptionRaw);
+
+          // Kiểm tra nếu có thẻ <image>
+          const img = article.image ? article.image[0] : null;
+
+          // Nếu không có <image>, tìm URL ảnh trong thẻ <description>
+          const imgFallbackMatch = descriptionRaw.match(
+            /<img[^>]+src="([^">]+)"/
+          );
+          const finalImg =
+            img || (imgFallbackMatch ? imgFallbackMatch[1] : null);
+
+          // Tạo document chỉ với các thuộc tính cần thiết
+          const processedArticle = {
+            url,
+            guid: articleGuid,
+            title,
+            description,
+            pubDate,
+            link,
+            img: finalImg || "/default-image.jpg", // Sử dụng ảnh mặc định nếu không tìm thấy
+            articlesCategory,
+            downloadedAt: new Date(),
           };
 
-          await collection.insertOne(XMLArticle);
-          console.log(`Inserted new raw XML for article with guid: ${articleGuid} and category: ${articlesCategory}`);
+          await collection.insertOne(processedArticle);
+          console.log(
+            `Inserted new article with guid: ${articleGuid} and category: ${articlesCategory}`
+          );
         }
       }
     }
@@ -118,8 +136,10 @@ async function downloadRSS() {
 }
 
 // Schedule the task to run every 1 minute (for testing, change to every 6 hours for production)
-cron.schedule('*/15 * * * *', () => {
-  console.log("Starting RSS feed download task (runs every 15 minute to fetch data)");
+cron.schedule("*/15 * * * *", () => {
+  console.log(
+    "Starting RSS feed download task (runs every 15 minute to fetch data)"
+  );
   downloadRSS();
 });
 
@@ -127,26 +147,4 @@ cron.schedule('*/15 * * * *', () => {
 (async () => {
   await connectToDB();
   downloadRSS();
-
 })();
-
-
-// // Laodong
-// "https://laodong.vn/rss/thoi-su.rss",
-// "https://laodong.vn/rss/the-gioi.rss",
-// "https://laodong.vn/rss/phap-luat.rss",
-// "https://laodong.vn/rss/the-thao.rss",
-// "https://laodong.vn/rss/xe.rss",
-// "https://laodong.vn/rss/suc-khoe.rss",
-// "https://laodong.vn/rss/xa-hoi.rss",
-// "https://laodong.vn/rss/kinh-doanh.rss",
-
-// //Tuoitre
-// "https://tuoitre.vn/rss/thoi-su.rss",
-// "https://tuoitre.vn/rss/the-gioi.rss",
-// "https://tuoitre.vn/rss/xe.rss",
-// "https://tuoitre.vn/rss/nhip-song-so.rss",
-// "https://tuoitre.vn/rss/the-thao.rss",
-// "https://tuoitre.vn/rss/khoa-hoc.rss",
-// "https://tuoitre.vn/rss/suc-khoe.rss",
-// "https://tuoitre.vn/rss/phap-luat.rss",
