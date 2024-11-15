@@ -1,0 +1,212 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.news-layout {
+  display: flex;
+  width: 70%;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+}
+
+.right-column {
+  width: 35%;
+  max-height: 140vh;
+  overflow-y: auto;
+  padding-right: 20px;
+}
+
+.main-news {
+  font-size: 2rem;
+  padding: 10px;
+  position: relative;
+}
+
+.main-news img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: -30px;
+}
+
+.secondary-news {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.secondary-news-card img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+}
+
+/* Styling for Overflow News (Additional News Format) */
+.additional-news {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.additional-news-card {
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  gap: 10px; /* Space between image and text content */
+}
+
+.additional-news-card img {
+  width: 80px; /* Maintain fixed image dimensions */
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px; /* Keeps the corners rounded */
+}
+
+.additional-news-card div {
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
+.additional-news-card h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.additional-news-card span {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 2px;
+}
+
+.additional-news-second-part-card {
+  display: flex;
+  flex-direction: row; /* Ensures horizontal layout */
+  align-items: flex-start; /* Aligns content at the top */
+  gap: 10px; /* Adds space between the image and content */
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.additional-news-second-part-card-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.additional-news-second-part-card div {
+  display: flex;
+  flex-direction: column; /* Content flows vertically */
+  justify-content: flex-start;
+}
+
+.additional-news-second-part-card h4 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: bold;
+  width: 70%;
+}
+
+.additional-news-second-part-card span {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* Load More Button Styling */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.load-more-button {
+  padding: 10px;
+  background-color: white;
+  border: 2px solid transparent;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.load-more-button:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
+
+.main-news-info {
+  display: flex;
+  align-items: center; /* Ensure vertical alignment of logo and time */
+  justify-content: flex-start; /* Align all items to the left */
+  gap: 20px; /* Add space between logo and time */
+  position: absolute; /* Position the info section */
+  left: 0; /* Align it to the left edge of the container */
+  bottom: -30px; /* Place it below the header */
+}
+
+.main-news-logo {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+} 
+
+.main-news-info span {
+  font-size: 18px; /* Consistent text size */
+  color: #666;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.secondary-news-info {
+  display: flex;
+  align-items: center; /* Vertically align logo and time */
+  gap: 10px; /* Space between logo and time */
+  justify-content: flex-start; /* Align everything to the left */
+  margin-top: -20px;
+  margin-bottom: -10px;
+}
+
+.secondary-news-logo {
+  width: 55px !important; /* Ensure a smaller size and override other styles */
+  height: 55px !important; /* Force dimensions */
+  display: inline-block; /* Ensure it is not treated as a block element */
+  object-fit: contain; /* Scale the logo without distortion */
+}
+
+.secondary-news-info span {
+  font-size: 12px; /* Adjust font size to be smaller */
+  color: #666;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+
+.additional-news-info {
+  display: flex;
+  align-items: center; /* Align logo and time vertically */
+  gap: 8px; /* Space between logo and time */
+  margin-top: 4px; /* Space below the header */
+}
+
+.additional-news-logo-1 {
+  width: 12px !important; /* Force smaller size */
+  height: 12px !important;
+  display: inline-block;
+  object-fit: contain; /* Maintain proportions */
+}
+
+.additional-news-info span {
+  font-size: 0.85rem;
+  color: #555;
+}
