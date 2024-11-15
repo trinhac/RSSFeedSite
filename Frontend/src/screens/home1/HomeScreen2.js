@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./HomeScreen2.css";
+import NewsTicker from "./NewsTicker";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/600x400";
 
@@ -89,21 +89,21 @@ export const SecondaryNewsSection = ({ articles }) => (
 export const AdditionalNews = ({ articles }) => (
   <div className="additional-news">
     {articles.map((article, index) => (
-      <div key={index} className="additional-news-card">
-        <a href={article.link} target="_blank" rel="noreferrer">
-          <img 
-            src={article.img} 
-            alt="Additional News" 
-            onError={(e) => handleImageError(e, article.img)} 
-            className="additional-news-image" 
-          />
-          <div className="additional-news-info">
-            <h4>{article.title}</h4>
-              <img src={getLogoUrl(article.url)} alt="Logo" className="additional-news-logo-1" />
-              <span>{getTimeDifference(article.pubDate)}</span>
+      <a key={index} href={article.link} target="_blank" rel="noreferrer" className="additional-news-card">
+        <img 
+          src={article.img} 
+          alt="Additional News" 
+          onError={(e) => handleImageError(e, article.img)} 
+          className="additional-news-image" 
+        />
+        <div className="additional-news-info">
+          <h4>{article.title}</h4>
+          <div className="additional-news-info-row">
+            <img src={getLogoUrl(article.url)} alt="Logo" className="additional-news-logo-1" />
+            <span>{getTimeDifference(article.pubDate)}</span>
           </div>
-        </a>
-      </div>
+        </div>
+      </a>
     ))}
   </div>
 );
@@ -112,31 +112,30 @@ export const AdditionalNews = ({ articles }) => (
 export const AdditionalNews2 = ({ articles }) => (
   <div className="additional-news-second-part">
     {articles.map((article, index) => (
-      <div key={index} className="additional-news-second-part-card">
-        <a href={article.link} target="_blank" rel="noreferrer">
-          <img 
-            src={article.img} 
-            alt="Additional News" 
-            onError={(e) => handleImageError(e, article.img)} 
-            className="additional-news-second-part-card-img" 
-          />
-          <div className="additional-news-info">
-            <h4>{article.title}</h4>
+      <a key={index} href={article.link} target="_blank" rel="noreferrer" className="additional-news-second-part-card">
+        <img 
+          src={article.img} 
+          alt="Additional News" 
+          onError={(e) => handleImageError(e, article.img)} 
+          className="additional-news-second-part-card-img" 
+        />
+        <div className="additional-news-info">
+          <h4>{article.title}</h4>
+          <div className="additional-news-info-row">
             <img src={getLogoUrl(article.url)} alt="Logo" className="additional-news-logo-2" />
-              <span>{getTimeDifference(article.pubDate)}</span>
+            <span>{getTimeDifference(article.pubDate)}</span>
           </div>
-        </a>
-      </div>
+        </div>
+      </a>
     ))}
   </div>
 );
-
 
 const HomeScreen = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [visibleOverflowCount, setVisibleOverflowCount] = useState(50); // Initial count of visible articles
 
   useEffect(() => {
     fetchArticles();
@@ -162,13 +161,20 @@ const HomeScreen = () => {
     }
   }, []);
 
+  // Logic to control visible articles
   const MainNews = articles[0];
   const TopThreeSecondaryNews = articles.slice(1, 4);
-  const AdditionalNewsArticles = articles.slice(4, 10); // Right column
-  const OverflowNews = articles.slice(10); // Under secondary news in left column
+  const AdditionalNewsArticles = articles.slice(4, 12); // Right column
+  const OverflowNews = articles.slice(12); // All remaining articles
+  const visibleOverflowNews = OverflowNews.slice(0, visibleOverflowCount); // Show only up to the current count
+
+  const handleLoadMore = () => {
+    setVisibleOverflowCount((prevCount) => prevCount + 50); // Increment by 50 on each click
+  };
 
   return (
     <>
+      <NewsTicker articles={articles} />
       <div className="home-container">
         {loading ? (
           <LoadingSpinner />
@@ -181,8 +187,8 @@ const HomeScreen = () => {
               {TopThreeSecondaryNews.length > 0 && (
                 <SecondaryNewsSection articles={TopThreeSecondaryNews} />
               )}
-              {OverflowNews.length > 0 && (
-                <AdditionalNews2 articles={OverflowNews} />
+              {visibleOverflowNews.length > 0 && (
+                <AdditionalNews2 articles={visibleOverflowNews} />
               )}
             </div>
             <div className="right-column">
@@ -194,13 +200,16 @@ const HomeScreen = () => {
         )}
       </div>
       <div className="load-more-container">
-        <button className="load-more-button" onClick={() => navigate("/home2")}>
-          <span>Xem thêm</span> →
-        </button>
+        {visibleOverflowNews.length < OverflowNews.length && (
+          <button className="load-more-button" onClick={handleLoadMore}>
+            <span>Xem thêm</span> →
+          </button>
+        )}
       </div>
     </>
   );
 };
+
 
 const getTimeDifference = (pubDate) => {
   const currentTime = new Date();
