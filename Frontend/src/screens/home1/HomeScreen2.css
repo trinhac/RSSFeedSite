@@ -1,0 +1,239 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.news-layout {
+  display: flex;
+  width: 70%;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+}
+
+.right-column {
+  width: 35%;
+  max-height: 140vh;
+  overflow-y: auto;
+  padding-right: 20px;
+}
+
+/* Main News Hover */
+/* Main News Styling */
+.main-news {
+  font-size: 2rem;
+  position: relative;
+  border-radius: 10px; /* Smooth edges */
+  overflow: hidden; /* Prevents content from going outside rounded edges */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover animation */
+}
+
+.main-news-image {
+  margin-bottom: -20px;
+  width: 660px;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for the image */
+}
+
+.main-news-info {
+  display: flex;
+  align-items: center; /* Ensure vertical alignment of logo and time */
+  justify-content: flex-start; /* Align all items to the left */
+  gap: 20px; /* Add space between logo and time */
+  position: relative; /* Keep the info in place */
+  bottom: 0; /* No offset, keeping it visible */
+}
+
+.main-news-logo {
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  object-fit: contain; /* Scale the logo without distortion */
+}
+
+.main-news-info span {
+  font-size: 18px; /* Consistent text size */
+  color: #666;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Hover Effect */
+.main-news:hover {
+  transform: scale(1.05); /* Slightly enlarge the entire component */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+}
+
+.main-news:hover .main-news-image {
+  transform: scale(1.05); /* Slight zoom for the image */
+}
+
+.main-news:hover .main-news-info {
+  transform: scale(1.05); /* Enlarge the logo and time */
+  margin-left: 20px;
+}
+
+.secondary-news {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.secondary-news-card img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+}
+
+.secondary-news-info {
+  display: flex;
+  align-items: center; /* Vertically align logo and time */
+  gap: 10px; /* Space between logo and time */
+  justify-content: flex-start; /* Align everything to the left */
+  margin-top: -20px;
+  margin-bottom: -10px;
+}
+
+.secondary-news-logo {
+  width: 55px !important; /* Ensure a smaller size and override other styles */
+  height: 55px !important; /* Force dimensions */
+  display: inline-block; /* Ensure it is not treated as a block element */
+  object-fit: contain; /* Scale the logo without distortion */
+}
+
+.secondary-news-info span {
+  font-size: 12px; /* Adjust font size to be smaller */
+  color: #666;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.secondary-news-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
+}
+
+.secondary-news-card:hover {
+  background-color: #f5f5f5; /* Change the background color */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.additional-news {
+  display: flex;
+  flex-direction: column; /* Ensures each news card is stacked vertically */
+  gap: 15px; /* Adds space between the cards */
+}
+
+.additional-news-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Inherit text color from parent */
+}
+
+.additional-news-card:hover {
+  background-color: #f9f9f9; /* Optional: Add hover effect */
+}
+
+.additional-news-image {
+  width: 100px; /* Fixed width for the thumbnail */
+  height: 100px; /* Fixed height for the thumbnail */
+  object-fit: cover; /* Keeps the aspect ratio intact */
+  border-radius: 5px; /* Rounded corners for the image */
+}
+
+.additional-news-info {
+  display: flex;
+  flex-direction: column; /* Organizes content vertically */
+  justify-content: flex-start; /* Align content to the top */
+}
+
+.additional-news-info h4 {
+  font-size: 1rem;
+  margin: 0; /* Removes extra space around the header */
+  font-weight: bold;
+}
+
+.additional-news-info-row {
+  display: flex;
+  align-items: center; /* Align logo and time vertically */
+  gap: 10px; /* Space between the logo and the time */
+  margin-top: 5px; /* Adds space below the header */
+}
+
+.additional-news-logo-1 {
+  width: 40px; /* Smaller logo size */
+  height: 40px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-info span {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.additional-news-second-part-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Ensure text color matches the theme */
+}
+
+.additional-news-second-part-card:hover {
+  background-color: #f9f9f9; /* Optional hover effect */
+}
+
+.additional-news-second-part-card-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.additional-news-logo-2 {
+  width: 60px; /* Smaller logo size */
+  height: 60px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Load More Button Styling */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.load-more-button {
+  padding: 10px;
+  background-color: white;
+  border: 2px solid transparent;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.load-more-button:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
