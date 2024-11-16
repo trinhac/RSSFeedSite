@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 import "./HomeScreen2.css";
 import NewsTicker from "./NewsTicker";
 
@@ -12,9 +13,10 @@ const ErrorMessage = ({ error, onRetry }) => (
   </div>
 );
 
+// Updated LoadingSpinner from the old HomeScreen
 const LoadingSpinner = () => (
   <div className="loading">
-    <p>Loading...</p>
+    <ClipLoader color="#3498db" size={50} />
   </div>
 );
 
@@ -25,8 +27,8 @@ const handleImageError = (e, url) => {
 
 const getLogoUrl = (rssUrl) => {
   try {
-    const parsedUrl = new URL(rssUrl); // Parse the URL to extract the hostname
-    const hostname = parsedUrl.hostname; // Example: 'vnexpress.net', 'thanhnien.vn', etc.
+    const parsedUrl = new URL(rssUrl);
+    const hostname = parsedUrl.hostname;
 
     if (hostname.includes("vnexpress")) {
       return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
@@ -35,48 +37,54 @@ const getLogoUrl = (rssUrl) => {
     } else if (hostname.includes("nhandan")) {
       return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
     } else {
-      return "https://via.placeholder.com/100x50?text=Logo"; // Default logo if domain not found
+      return "https://via.placeholder.com/100x50?text=Logo";
     }
   } catch (error) {
     console.error("Invalid URL:", rssUrl, error);
-    return "https://via.placeholder.com/100x50?text=Logo"; // Default in case of an error
+    return "https://via.placeholder.com/100x50?text=Logo";
   }
 };
-
 
 export const MainNewsCard = ({ article }) => (
   <div className="main-news">
     <a href={article.link} target="_blank" rel="noreferrer">
-      <img 
-        src={article.img} 
-        alt="Main News" 
-        onError={(e) => handleImageError(e, article.img)} 
-        className="main-news-image" 
+      <img
+        src={article.img}
+        alt="Main News"
+        onError={(e) => handleImageError(e, article.img)}
+        className="main-news-image"
       />
       <h2>{article.title}</h2>
       <div className="main-news-info">
-        <img src={getLogoUrl(article.url)} alt="Logo" className="main-news-logo" />
+        <img
+          src={getLogoUrl(article.url)}
+          alt="Logo"
+          className="main-news-logo"
+        />
         <span>{getTimeDifference(article.pubDate)}</span>
       </div>
     </a>
   </div>
 );
 
-
 export const SecondaryNewsSection = ({ articles }) => (
   <div className="secondary-news">
     {articles.map((article, index) => (
       <div key={index} className="secondary-news-card">
         <a href={article.link} target="_blank" rel="noreferrer">
-          <img 
-            src={article.img} 
-            alt="Secondary News" 
-            onError={(e) => handleImageError(e, article.img)} 
-            className="secondary-news-image" 
+          <img
+            src={article.img}
+            alt="Secondary News"
+            onError={(e) => handleImageError(e, article.img)}
+            className="secondary-news-image"
           />
           <h3>{article.title}</h3>
           <div className="secondary-news-info">
-          <img src={getLogoUrl(article.url)} alt="Logo" className="secondary-news-logo" />
+            <img
+              src={getLogoUrl(article.url)}
+              alt="Logo"
+              className="secondary-news-logo"
+            />
             <span>{getTimeDifference(article.pubDate)}</span>
           </div>
         </a>
@@ -85,21 +93,30 @@ export const SecondaryNewsSection = ({ articles }) => (
   </div>
 );
 
-
 export const AdditionalNews = ({ articles }) => (
   <div className="additional-news">
     {articles.map((article, index) => (
-      <a key={index} href={article.link} target="_blank" rel="noreferrer" className="additional-news-card">
-        <img 
-          src={article.img} 
-          alt="Additional News" 
-          onError={(e) => handleImageError(e, article.img)} 
-          className="additional-news-image" 
+      <a
+        key={index}
+        href={article.link}
+        target="_blank"
+        rel="noreferrer"
+        className="additional-news-card"
+      >
+        <img
+          src={article.img}
+          alt="Additional News"
+          onError={(e) => handleImageError(e, article.img)}
+          className="additional-news-image"
         />
         <div className="additional-news-info">
           <h4>{article.title}</h4>
           <div className="additional-news-info-row">
-            <img src={getLogoUrl(article.url)} alt="Logo" className="additional-news-logo-1" />
+            <img
+              src={getLogoUrl(article.url)}
+              alt="Logo"
+              className="additional-news-logo-1"
+            />
             <span>{getTimeDifference(article.pubDate)}</span>
           </div>
         </div>
@@ -108,21 +125,30 @@ export const AdditionalNews = ({ articles }) => (
   </div>
 );
 
-
 export const AdditionalNews2 = ({ articles }) => (
   <div className="additional-news-second-part">
     {articles.map((article, index) => (
-      <a key={index} href={article.link} target="_blank" rel="noreferrer" className="additional-news-second-part-card">
-        <img 
-          src={article.img} 
-          alt="Additional News" 
-          onError={(e) => handleImageError(e, article.img)} 
-          className="additional-news-second-part-card-img" 
+      <a
+        key={index}
+        href={article.link}
+        target="_blank"
+        rel="noreferrer"
+        className="additional-news-second-part-card"
+      >
+        <img
+          src={article.img}
+          alt="Additional News"
+          onError={(e) => handleImageError(e, article.img)}
+          className="additional-news-second-part-card-img"
         />
         <div className="additional-news-info">
           <h4>{article.title}</h4>
           <div className="additional-news-info-row">
-            <img src={getLogoUrl(article.url)} alt="Logo" className="additional-news-logo-2" />
+            <img
+              src={getLogoUrl(article.url)}
+              alt="Logo"
+              className="additional-news-logo-2"
+            />
             <span>{getTimeDifference(article.pubDate)}</span>
           </div>
         </div>
@@ -135,7 +161,7 @@ const HomeScreen = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleOverflowCount, setVisibleOverflowCount] = useState(50); // Initial count of visible articles
+  const [visibleOverflowCount, setVisibleOverflowCount] = useState(50);
 
   useEffect(() => {
     fetchArticles();
@@ -161,55 +187,57 @@ const HomeScreen = () => {
     }
   }, []);
 
-  // Logic to control visible articles
   const MainNews = articles[0];
   const TopThreeSecondaryNews = articles.slice(1, 4);
-  const AdditionalNewsArticles = articles.slice(4, 12); // Right column
-  const OverflowNews = articles.slice(12); // All remaining articles
-  const visibleOverflowNews = OverflowNews.slice(0, visibleOverflowCount); // Show only up to the current count
+  const AdditionalNewsArticles = articles.slice(4, 12);
+  const OverflowNews = articles.slice(12);
+  const visibleOverflowNews = OverflowNews.slice(0, visibleOverflowCount);
 
   const handleLoadMore = () => {
-    setVisibleOverflowCount((prevCount) => prevCount + 50); // Increment by 50 on each click
+    setVisibleOverflowCount((prevCount) => prevCount + 50);
   };
 
   return (
     <>
-      <NewsTicker articles={articles} />
-      <div className="home-container">
-        {loading ? (
-          <LoadingSpinner />
-        ) : error ? (
-          <ErrorMessage error={error} onRetry={fetchArticles} />
-        ) : (
-          <div className="news-layout">
-            <div className="left-column">
-              {MainNews && <MainNewsCard article={MainNews} />}
-              {TopThreeSecondaryNews.length > 0 && (
-                <SecondaryNewsSection articles={TopThreeSecondaryNews} />
-              )}
-              {visibleOverflowNews.length > 0 && (
-                <AdditionalNews2 articles={visibleOverflowNews} />
-              )}
-            </div>
-            <div className="right-column">
-              {AdditionalNewsArticles.length > 0 && (
-                <AdditionalNews articles={AdditionalNewsArticles} />
-              )}
-            </div>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <NewsTicker articles={articles} />
+          <div className="home-container">
+            {error ? (
+              <ErrorMessage error={error} onRetry={fetchArticles} />
+            ) : (
+              <div className="news-layout">
+                <div className="left-column">
+                  {MainNews && <MainNewsCard article={MainNews} />}
+                  {TopThreeSecondaryNews.length > 0 && (
+                    <SecondaryNewsSection articles={TopThreeSecondaryNews} />
+                  )}
+                  {visibleOverflowNews.length > 0 && (
+                    <AdditionalNews2 articles={visibleOverflowNews} />
+                  )}
+                </div>
+                <div className="right-column">
+                  {AdditionalNewsArticles.length > 0 && (
+                    <AdditionalNews articles={AdditionalNewsArticles} />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="load-more-container">
-        {visibleOverflowNews.length < OverflowNews.length && (
-          <button className="load-more-button" onClick={handleLoadMore}>
-            <span>Xem thêm</span> →
-          </button>
-        )}
-      </div>
+          <div className="load-more-container">
+            {visibleOverflowNews.length < OverflowNews.length && (
+              <button className="load-more-button" onClick={handleLoadMore}>
+                <span>Xem thêm</span> →
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 };
-
 
 const getTimeDifference = (pubDate) => {
   const currentTime = new Date();
