@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import HomeScreen from "./screens/home/HomeScreen";
 import HomeScreen2 from "./screens/home1/HomeScreen2";
 import SearchScreen from "./screens/search/SearchScreen";
 import Header from "./components/header/Header";
@@ -28,7 +27,6 @@ const App = () => {
         <Route path="/category/:category" element={<CategoryArticles />} />
 
         <Route path="/" element={<HomeScreen2/>} />
-        <Route path="/home2" element={<HomeScreen/>} />
       </Routes>
 
       <Footer />
