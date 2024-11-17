@@ -73,6 +73,46 @@ async function downloadRSS() {
     "https://nhandan.vn/rss/giaoduc-1303.rss",
   ];
 
+  const arrangedCategoryMapping = {
+    // Thế giới
+    "https://vnexpress.net/rss/the-gioi.rss": "the-gioi",
+    "https://thanhnien.vn/rss/the-gioi.rss": "the-gioi",
+    "https://nhandan.vn/rss/asean-704471.rss": "the-gioi",
+    // Thời sự
+    "https://vnexpress.net/rss/thoi-su.rss": "thoi-su",
+    "https://thanhnien.vn/rss/thoi-su.rss": "thoi-su",
+    // Kinh tế
+    "https://vnexpress.net/rss/kinh-doanh.rss": "kinh-te",
+    "https://thanhnien.vn/rss/kinh-te.rss": "kinh-te",
+    "https://nhandan.vn/rss/kinhte-1185.rss": "kinh-te",
+    // Khoa học - Công nghệ
+    "https://vnexpress.net/rss/khoa-hoc.rss": "khoa-hoc-cong-nghe",
+    "https://vnexpress.net/rss/so-hoa.rss": "khoa-hoc-cong-nghe",
+    "https://thanhnien.vn/rss/cong-nghe.rss": "khoa-hoc-cong-nghe",
+    "https://nhandan.vn/rss/khoahoc-congnghe-1292.rss": "khoa-hoc-cong-nghe",
+    // Xe
+    "https://vnexpress.net/rss/oto-xe-may.rss": "xe",
+    "https://thanhnien.vn/rss/xe.rss": "xe",
+    // Sức khỏe - Đời sống
+    "https://vnexpress.net/rss/suc-khoe.rss": "suc-khoe-doi-song",
+    "https://thanhnien.vn/rss/suc-khoe.rss": "suc-khoe-doi-song",
+    "https://nhandan.vn/rss/bhxh-va-cuoc-song-1222.rss": "suc-khoe-doi-song",
+    "https://nhandan.vn/rss/y-te-1309.rss": "suc-khoe-doi-song",
+    // Thể thao
+    "https://vnexpress.net/rss/the-thao.rss": "the-thao",
+    "https://thanhnien.vn/rss/the-thao.rss": "the-thao",
+    "https://nhandan.vn/rss/thethao-1224.rss": "the-thao",
+    // Pháp luật - Chính trị
+    "https://vnexpress.net/rss/phap-luat.rss": "phap-luat-chinh-tri",
+    "https://nhandan.vn/rss/phapluat-1287.rss": "phap-luat-chinh-tri",
+    "https://nhandan.vn/rss/chinhtri-1171.rss": "phap-luat-chinh-tri",
+
+    // Giáo dục
+    "https://vnexpress.net/rss/giao-duc.rss": "giao-duc",
+    "https://thanhnien.vn/rss/giao-duc.rss": "giao-duc",
+    "https://nhandan.vn/rss/giaoduc-1303.rss": "giao-duc",
+  };
+
   try {
     for (const url of rssUrls) {
       const response = await fetch(url);
@@ -86,6 +126,7 @@ async function downloadRSS() {
       const collection = db.collection("test_json_xml");
 
       const articlesCategory = extractCategory(url);
+      const arrangedCategory = arrangedCategoryMapping[url] || "unknown";
 
       for (const article of articles) {
         const articleGuid = article.guid[0] || article.link[0];
@@ -96,21 +137,15 @@ async function downloadRSS() {
           const pubDate = article.pubDate[0];
           const link = article.link[0];
           const descriptionRaw = article.description[0];
-
-          // Lấy văn bản từ description
           const description = extractTextFromDescription(descriptionRaw);
 
-          // Kiểm tra nếu có thẻ <image>
           const img = article.image ? article.image[0] : null;
-
-          // Nếu không có <image>, tìm URL ảnh trong thẻ <description>
           const imgFallbackMatch = descriptionRaw.match(
             /<img[^>]+src="([^">]+)"/
           );
           const finalImg =
             img || (imgFallbackMatch ? imgFallbackMatch[1] : null);
 
-          // Tạo document chỉ với các thuộc tính cần thiết
           const processedArticle = {
             url,
             guid: articleGuid,
@@ -118,14 +153,15 @@ async function downloadRSS() {
             description,
             pubDate,
             link,
-            img: finalImg || "/default-image.jpg", // Sử dụng ảnh mặc định nếu không tìm thấy
+            img: finalImg || "/default-image.jpg",
             articlesCategory,
+            arrangedCategory,
             downloadedAt: new Date(),
           };
 
           await collection.insertOne(processedArticle);
           console.log(
-            `Inserted new article with guid: ${articleGuid} and category: ${articlesCategory}`
+            `Inserted new article with guid: ${articleGuid}, category: ${articlesCategory}, arrangedCategory: ${arrangedCategory}`
           );
         }
       }

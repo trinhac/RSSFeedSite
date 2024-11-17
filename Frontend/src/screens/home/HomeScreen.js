@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
-import "./HomeScreen2.css";
+import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/600x400";
@@ -157,6 +157,70 @@ export const AdditionalNews2 = ({ articles }) => (
   </div>
 );
 
+const partners = [
+  {
+    name: "Thanh Niên",
+    logoUrl: "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg",
+    link: "https://thanhnien.vn/",
+  },
+  {
+    name: "Nhân Dân",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128",
+    link: "https://nhandan.vn/",
+  },
+  {
+    name: "VnExpress",
+    logoUrl:
+      "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg",
+    link: "https://vnexpress.net/",
+  },
+];
+
+export const PartnersSection = () => {
+  return (
+    <div className="partners-section">
+      <h3>Tổng hợp các báo</h3>
+      <div className="partners-container">
+        <div className="marquee">
+          {partners.map((partner, index) => (
+            <a
+              key={index}
+              href={partner.link}
+              target="_blank"
+              rel="noreferrer"
+              className="partner-card"
+            >
+              <img
+                src={partner.logoUrl}
+                alt={partner.name}
+                className="partner-logo"
+              />
+              <span className="partner-name">{partner.name}</span>
+            </a>
+          ))}
+          {/* Lặp lại các phần tử để tạo hiệu ứng cuộn liên tục */}
+          {partners.map((partner, index) => (
+            <a
+              key={`repeat-${index}`}
+              href={partner.link}
+              target="_blank"
+              rel="noreferrer"
+              className="partner-card"
+            >
+              <img
+                src={partner.logoUrl}
+                alt={partner.name}
+                className="partner-logo"
+              />
+              <span className="partner-name">{partner.name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 const HomeScreen = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -222,6 +286,7 @@ const HomeScreen = () => {
                   {AdditionalNewsArticles.length > 0 && (
                     <AdditionalNews articles={AdditionalNewsArticles} />
                   )}
+                  <PartnersSection />
                 </div>
               </div>
             )}

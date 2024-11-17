@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import HomeScreen2 from "./screens/home1/HomeScreen2";
+import HomeScreen from "./screens/home/HomeScreen";
 import SearchScreen from "./screens/search/SearchScreen";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -18,15 +18,15 @@ const App = () => {
 
       <Routes>
         {/* Route cho HomeScreen với đường dẫn /trang-chu */}
-        <Route path="/trang-chu" element={<HomeScreen2/>} />
+        <Route path="/trang-chu" element={<HomeScreen />} />
 
         {/* Route chuyển hướng từ / về /trang-chu */}
         <Route path="/" element={<Navigate to="/trang-chu" replace />} />
-    
+
         <Route path="/search" element={<SearchScreen />} />
         <Route path="/category/:category" element={<CategoryArticles />} />
 
-        <Route path="/" element={<HomeScreen2/>} />
+        <Route path="/" element={<HomeScreen />} />
       </Routes>
 
       <Footer />

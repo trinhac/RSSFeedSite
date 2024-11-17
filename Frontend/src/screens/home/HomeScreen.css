@@ -236,4 +236,87 @@
 .load-more-button:hover {
   background-color: #e0e0e0;
   border-color: #ccc;
+  
 }
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
+  background-color: #f9f9f9; /* Màu nền (tuỳ chọn) */
+}
+
+.partners-section {
+  background-color: #111;
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  border: 1px solid #333;
+  text-align: center;
+  margin-top: 10%;
+}
+
+.partners-section h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.partners-container {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee {
+  display: flex;
+  animation: scroll 7s linear infinite;
+}
+
+.partner-card {
+  width: 130px;
+  height: 80px; /* Tăng chiều cao để có đủ không gian */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* Đảm bảo khoảng cách đều giữa logo và tên */
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid #333;
+  background-color: #222;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  padding: 10px; /* Thêm khoảng đệm để không gian thoáng hơn */
+  box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước phần tử */
+}
+
+.partner-card:hover {
+  transform: scale(1.1);
+}
+
+.partner-logo {
+  max-width: 100px;
+  max-height: 50px;
+  object-fit: contain; /* Đảm bảo logo luôn nằm trong khung */
+}
+
+.partner-name {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Dừng animation khi trỏ chuột vào */
+.partners-container:hover .marquee {
+  animation-play-state: paused;
+}
+

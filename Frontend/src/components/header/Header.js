@@ -62,31 +62,28 @@ const NavMenu = ({ onHomeClick, isMenuOpen, toggleMenu }) => {
         <li>
           <i className="fa fa-home" onClick={onHomeClick}></i>{" "}
         </li>
+        <li onClick={() => navigateToCategory("the-gioi")}>Thế giới</li>
         <li onClick={() => navigateToCategory("thoi-su")}>Thời sự</li>
         <li onClick={() => navigateToCategory("kinh-te")}>Kinh tế</li>
-        <li onClick={() => navigateToCategory("y-te-1309")}>Y tế</li>
-        <li onClick={() => navigateToCategory("phapluat-1287")}>Pháp luật</li>
-        <li onClick={() => navigateToCategory("bhxh-va-cuoc-song-1222")}>
-          Đời sống
+        <li onClick={() => navigateToCategory("khoa-hoc-cong-nghe")}>
+          Khoa học - Công nghệ
         </li>
-        <li onClick={() => navigateToCategory("chinhtri-1171")}>Xã hội</li>
-        <li onClick={() => navigateToCategory("giaoduc-1303")}>Giáo dục</li>
-        <li onClick={() => navigateToCategory("khoahoc-congnghe-1292")}>
-          Công nghệ
+        <li onClick={() => navigateToCategory("xe")}>Xe</li>
+        <li onClick={() => navigateToCategory("suc-khoe-doi-song")}>
+          Sức khỏe
         </li>
-        <li onClick={() => navigateToCategory("y-te-1309")}>Sức khỏe</li>
         <li onClick={() => navigateToCategory("the-thao")}>Thể thao</li>
+        <li onClick={() => navigateToCategory("phap-luat-chinh-tri")}>
+          Pháp luật
+        </li>
+        <li onClick={() => navigateToCategory("giao-duc")}>Giáo dục</li>
         <li onClick={toggleMenu} className="menu-icon">
           ☰
         </li>
       </ul>
       {isMenuOpen && (
         <div className="dropdown-menu">
-          <ul>
-            <li onClick={() => navigateToCategory("the-gioi")}>Thế giới</li>
-            <li onClick={() => navigateToCategory("asean-704471")}>Văn hóa</li>
-            {/* Thêm các mục khác tương tự */}
-          </ul>
+          <ul>{/* Thêm các mục khác tương tự */}</ul>
         </div>
       )}
     </nav>

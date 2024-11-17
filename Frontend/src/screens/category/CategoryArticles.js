@@ -22,6 +22,22 @@ const CategoryArticles = () => {
     }
   };
 
+  const getDisplayCategoryName = (category) => {
+    const categoryMapping = {
+      "the-gioi": "Thế giới",
+      "thoi-su": "Thời sự",
+      "kinh-te": "Kinh tế",
+      "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
+      xe: "Xe",
+      "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+      "the-thao": "Thể thao",
+      "phap-luat-chinh-tri": "Pháp luật - Chính trị",
+      "giao-duc": "Giáo dục",
+    };
+
+    return categoryMapping[category] || "Không xác định";
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN");
@@ -47,6 +63,7 @@ const CategoryArticles = () => {
       }
     };
     fetchArticlesByCategory();
+    setCurrentPage(1); // Reset to the first page when search results change
   }, [category]);
 
   const sortedArticles = articles.sort(
@@ -123,7 +140,7 @@ const CategoryArticles = () => {
 
   return (
     <div className="search-screen">
-      <h1>Articles in {category}</h1>
+      <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
         <p>Đang tải...</p>
       ) : articles.length === 0 ? (
