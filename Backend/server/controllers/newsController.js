@@ -1,4 +1,4 @@
-const News = require('../models/News');
+const News = require("../models/News");
 
 exports.getNewsByDate = async (req, res) => {
   try {
@@ -32,25 +32,23 @@ exports.getNewsByKeyword = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await News.distinct("articlesCategory");
+    const categories = await News.distinct("arrangedCategory");
     const allowedCategories = [
-      "the-gioi", 
-      "thoi-su", 
-      "kinh-te", 
-      "khoa-hoc",
-      "so-hoa",
-      "khoahoc-congnghe-1292",
-      "cong-nghe",
-      "xe", 
-      "suc-khoe", 
-      "the-thao", 
-      "phap-luat", 
+      "the-gioi",
+      "thoi-su",
+      "kinh-te",
+      "khoa-hoc-cong-nghe",
+      "xe",
+      "suc-khoe-doi-song",
+      "the-thao",
+      "phap-luat-chinh-tri",
       "giao-duc",
-      "chinhtri-1171",
     ];
 
-    const filteredCategories = categories.filter(cat => allowedCategories.includes(cat));
-    
+    const filteredCategories = categories.filter((cat) =>
+      allowedCategories.includes(cat)
+    );
+
     res.json(filteredCategories);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -60,13 +58,12 @@ exports.getCategories = async (req, res) => {
 exports.getNewsByTopic = async (req, res) => {
   try {
     const { topic } = req.query; // Get the category from the query params
-    const news = await News.find({ articlesCategory: topic });
+    const news = await News.find({ arrangedCategory: topic });
     res.json(news);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.searchNews = async (req, res) => {
   try {
@@ -82,7 +79,7 @@ exports.searchNews = async (req, res) => {
         { title: { $regex: keyword, $options: "i" } },
         { description: { $regex: keyword, $options: "i" } },
         { authors: { $in: [new RegExp(keyword, "i")] } },
-      ]
+      ],
     });
 
     res.status(200).json(results);
@@ -92,7 +89,6 @@ exports.searchNews = async (req, res) => {
   }
 };
 
-
 exports.getAllArticles = async (req, res) => {
   try {
     const articles = await News.find();
@@ -101,4 +97,3 @@ exports.getAllArticles = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-

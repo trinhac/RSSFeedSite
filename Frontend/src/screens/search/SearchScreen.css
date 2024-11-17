@@ -24,10 +24,12 @@
   }
   
   .article-image {
-
     border-radius: 8px;
-    width: 30%;
+    width: 450px;
     height: 250px;
+    object-fit: cover;
+    min-width: 450px;
+    min-height: 250px;
   }
   
   h2 {

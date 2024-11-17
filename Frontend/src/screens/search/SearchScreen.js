@@ -45,6 +45,7 @@ const SearchScreen = () => {
     const parsedArticles = searchResults.map(parseArticles);
     const sortedArticles = sortArticlesByDate(parsedArticles);
     setSortedResults(sortedArticles);
+    setCurrentPage(1); // Reset to the first page when search results change
     setLoading(false);
   }, [searchResults]);
 

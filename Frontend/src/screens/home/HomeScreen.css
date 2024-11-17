@@ -1,130 +1,243 @@
-/* HomeScreen.css */
-
 .home-container {
-  font-family: Arial, sans-serif;
-}
-
-.nav ul {
   display: flex;
-  gap: 15px;
-  list-style-type: none;
-}
-
-.nav ul li {
-  cursor: pointer;
-}
-
-.search-bar input {
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.list {
-  padding-right: 15%;
-  padding-left: 15%;
-}
-
-.hot-list {
+  justify-content: center;
   padding: 20px;
 }
 
-.list-container {
+.news-layout {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 20px;
+  width: 70%;
+  gap: 20px;
+  align-items: stretch;
 }
 
-.list-grid {
-  display: grid;
-  gap: 20px; /* Khoảng cách giữa các bài viết */
-  flex-grow: 1;
-  /* Mặc định 1 cột cho mobile */
-  grid-template-columns: repeat(1, 1fr);
-}
-
-.list-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Shadow cho hiệu ứng 3D */
-  transition: transform 0.3s ease;
-}
-
-.list-card img {
-  width: 100%;
-  height: 250px; /* Chiều cao cố định để chuẩn hóa kích thước hình ảnh */
-  object-fit: cover; /* Đảm bảo hình ảnh phủ đầy container */
-  transition: transform 0.3s ease;
-}
-
-.list-card:hover {
-  transform: scale(1.05); /* Tăng kích thước card khi hover */
-}
-
-.card-info {
-  position: absolute;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  width: 100%;
-  padding: 10px;
-  color: white;
-  text-align: left;
-  min-height: 30%; /* Đảm bảo chiều cao tối thiểu */
+.left-column {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden; /* Giúp giới hạn nội dung bên trong */
+  width: 65%;
 }
 
-.card-info h3 {
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.4;
-  display: -webkit-box; /* Sử dụng cho tính năng clamp */
-  -webkit-line-clamp: 2; /* Hiển thị tối đa 2 dòng */
-  -webkit-box-orient: vertical; /* Thiết lập hướng hiển thị là dọc */
-  overflow: hidden; /* Ẩn nội dung vượt quá */
-  text-overflow: ellipsis; /* Thêm dấu ba chấm nếu nội dung quá dài */
+.right-column {
+  width: 35%;
+  max-height: 140vh;
+  overflow-y: auto;
+  padding-right: 20px;
 }
 
-.prev-btn,
-.next-btn {
-  background-color: #333;
-  color: #fff;
-  border: none;
+/* Main News Hover */
+/* Main News Styling */
+.main-news {
+  font-size: 2rem;
+  position: relative;
+  border-radius: 10px; /* Smooth edges */
+  overflow: hidden; /* Prevents content from going outside rounded edges */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover animation */
+}
+
+.main-news-image {
+  margin-bottom: -20px;
+  width: 660px;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for the image */
+}
+
+.main-news-info {
+  display: flex;
+  align-items: center; /* Ensure vertical alignment of logo and time */
+  justify-content: flex-start; /* Align all items to the left */
+  gap: 20px; /* Add space between logo and time */
+  position: relative; /* Keep the info in place */
+  bottom: 0; /* No offset, keeping it visible */
+}
+
+.main-news-logo {
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  object-fit: contain; /* Scale the logo without distortion */
+}
+
+.main-news-info span {
+  font-size: 18px; /* Consistent text size */
+  color: #666;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Hover Effect */
+.main-news:hover {
+  transform: scale(1.05); /* Slightly enlarge the entire component */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+}
+
+.main-news:hover .main-news-image {
+  transform: scale(1.05); /* Slight zoom for the image */
+}
+
+.main-news:hover .main-news-info {
+  transform: scale(1.05); /* Enlarge the logo and time */
+  margin-left: 20px;
+}
+
+.secondary-news {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.secondary-news-card img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+}
+
+.secondary-news-info {
+  display: flex;
+  align-items: center; /* Vertically align logo and time */
+  gap: 10px; /* Space between logo and time */
+  justify-content: flex-start; /* Align everything to the left */
+  margin-top: -20px;
+  margin-bottom: -10px;
+}
+
+.secondary-news-logo {
+  width: 55px !important; /* Ensure a smaller size and override other styles */
+  height: 55px !important; /* Force dimensions */
+  display: inline-block; /* Ensure it is not treated as a block element */
+  object-fit: contain; /* Scale the logo without distortion */
+}
+
+.secondary-news-info span {
+  font-size: 12px; /* Adjust font size to be smaller */
+  color: #666;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.secondary-news-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
+}
+
+.secondary-news-card:hover {
+  background-color: #f5f5f5; /* Change the background color */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.additional-news {
+  display: flex;
+  flex-direction: column; /* Ensures each news card is stacked vertically */
+  gap: 15px; /* Adds space between the cards */
+}
+
+.additional-news-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Inherit text color from parent */
+}
+
+.additional-news-card:hover {
+  background-color: #f9f9f9; /* Optional: Add hover effect */
+}
+
+.additional-news-image {
+  width: 100px; /* Fixed width for the thumbnail */
+  height: 100px; /* Fixed height for the thumbnail */
+  object-fit: cover; /* Keeps the aspect ratio intact */
+  border-radius: 5px; /* Rounded corners for the image */
+}
+
+.additional-news-info {
+  display: flex;
+  flex-direction: column; /* Organizes content vertically */
+  justify-content: flex-start; /* Align content to the top */
+}
+
+.additional-news-info h4 {
+  font-size: 1rem;
+  margin: 0; /* Removes extra space around the header */
+  font-weight: bold;
+}
+
+.additional-news-info-row {
+  display: flex;
+  align-items: center; /* Align logo and time vertically */
+  gap: 10px; /* Space between the logo and the time */
+  margin-top: 5px; /* Adds space below the header */
+}
+
+.additional-news-logo-1 {
+  width: 40px; /* Smaller logo size */
+  height: 40px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-info span {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.additional-news-second-part-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Ensure text color matches the theme */
+}
+
+.additional-news-second-part-card:hover {
+  background-color: #f9f9f9; /* Optional hover effect */
+}
+
+.additional-news-second-part-card-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.additional-news-logo-2 {
+  width: 60px; /* Smaller logo size */
+  height: 60px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Load More Button Styling */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.load-more-button {
   padding: 10px;
+  background-color: white;
+  border: 2px solid transparent;
+  color: black;
   font-size: 18px;
   cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-.prev-btn:hover,
-.next-btn:hover {
-  background-color: #555;
+.load-more-button:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+  
 }
-
-.prev-btn:disabled,
-.next-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-a {
-  text-decoration: none; /* Remove underline */
-  color: inherit; /* Inherit the current color from parent element */
-}
-
-a:visited {
-  color: inherit; /* Prevent the purple color after the link is visited */
-}
-
-a:hover {
-  text-decoration: underline; /* Optional: Add underline on hover */
-}
-
 .loading {
   display: flex;
   justify-content: center;
@@ -133,67 +246,77 @@ a:hover {
   background-color: #f9f9f9; /* Màu nền (tuỳ chọn) */
 }
 
-/* Các kiểu CSS cho error */
-.error {
+.partners-section {
+  background-color: #111;
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  border: 1px solid #333;
+  text-align: center;
+  margin-top: 10%;
+}
+
+.partners-section h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.partners-container {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee {
+  display: flex;
+  animation: scroll 7s linear infinite;
+}
+
+.partner-card {
+  width: 130px;
+  height: 80px; /* Tăng chiều cao để có đủ không gian */
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  color: red;
-  background-color: #f9f9f9;
+  justify-content: space-between; /* Đảm bảo khoảng cách đều giữa logo và tên */
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid #333;
+  background-color: #222;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  padding: 10px; /* Thêm khoảng đệm để không gian thoáng hơn */
+  box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước phần tử */
 }
 
-.error button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.partner-card:hover {
+  transform: scale(1.1);
 }
 
-.error button:hover {
-  background-color: #2980b9;
+.partner-logo {
+  max-width: 100px;
+  max-height: 50px;
+  object-fit: contain; /* Đảm bảo logo luôn nằm trong khung */
 }
 
-/* Responsive Grid Layout */
-
-@media (min-width: 768px) {
-  .list-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 cột cho tablet */
+.partner-name {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-@media (min-width: 992px) {
-  .list-grid {
-    grid-template-columns: repeat(4, 1fr); /* 4 cột cho desktop */
-  }
+/* Dừng animation khi trỏ chuột vào */
+.partners-container:hover .marquee {
+  animation-play-state: paused;
 }
 
-@media (min-width: 1600px) {
-  .list-grid {
-    grid-template-columns: repeat(5, 1fr); /* 6 cột cho desktop rất lớn */
-  }
-}
-
-.card-info-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Căn giữa theo chiều dọc */
-}
-.card-info-footer img.article-logo {
-  width: 30%;
-  height: 15%;
-}
-
-.card-info span {
-  font-size: 16px;
-  color: #ffcc00;
-  margin-right: 8%;
-}
-
-.card-info-h3 {
-  margin-right: 4%;
-}

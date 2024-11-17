@@ -48,49 +48,47 @@ const SearchBar = ({ keyword, onChange, onSearch }) => {
 };
 
 // Navigation Menu Component
-const NavMenu = ({ onHomeClick, isMenuOpen, toggleMenu }) => (
-  <nav className="nav">
-    <ul>
-      <li>
-        <i className="fa fa-home" onClick={onHomeClick}></i>{" "}
-      </li>
-      <li>Thời sự</li>
-      <li>Kinh tế</li>
-      <li>Y tế</li>
-      <li>Pháp luật</li>
-      <li>Đời sống</li>
-      <li>Xã hội</li>
-      <li>Giáo dục</li>
-      <li>Du lịch</li>
-      <li>Công nghệ</li>
-      <li>Sức khỏe</li>
-      <li>Thể thao</li>
-      <li onClick={toggleMenu} className="menu-icon">
-        ☰
-      </li>
-    </ul>
-    {isMenuOpen && (
-      <div className="dropdown-menu">
-        <ul>
-          <li>Bóng đá</li>
-          <li>Thế giới</li>
-          <li>Xã hội</li>
-          <li>Văn hóa</li>
-          <li>Kinh tế</li>
-          <li>Giáo dục</li>
-          <li>Thể thao</li>
-          <li>Giải trí</li>
-          <li>Pháp luật</li>
-          <li>Công nghệ</li>
-          <li>Đời sống</li>
-          <li>Xe cộ</li>
-          <li>Nhà đất</li>
-          <li>Tiện ích</li>
-        </ul>
-      </div>
-    )}
-  </nav>
-);
+const NavMenu = ({ onHomeClick, isMenuOpen, toggleMenu }) => {
+  const navigate = useNavigate();
+
+  // Hàm để điều hướng tới trang danh mục
+  const navigateToCategory = (category) => {
+    navigate(`/category/${category}`);
+  };
+
+  return (
+    <nav className="nav">
+      <ul>
+        <li>
+          <i className="fa fa-home" onClick={onHomeClick}></i>{" "}
+        </li>
+        <li onClick={() => navigateToCategory("the-gioi")}>Thế giới</li>
+        <li onClick={() => navigateToCategory("thoi-su")}>Thời sự</li>
+        <li onClick={() => navigateToCategory("kinh-te")}>Kinh tế</li>
+        <li onClick={() => navigateToCategory("khoa-hoc-cong-nghe")}>
+          Khoa học - Công nghệ
+        </li>
+        <li onClick={() => navigateToCategory("xe")}>Xe</li>
+        <li onClick={() => navigateToCategory("suc-khoe-doi-song")}>
+          Sức khỏe
+        </li>
+        <li onClick={() => navigateToCategory("the-thao")}>Thể thao</li>
+        <li onClick={() => navigateToCategory("phap-luat-chinh-tri")}>
+          Pháp luật
+        </li>
+        <li onClick={() => navigateToCategory("giao-duc")}>Giáo dục</li>
+        <li onClick={toggleMenu} className="menu-icon">
+          ☰
+        </li>
+      </ul>
+      {isMenuOpen && (
+        <div className="dropdown-menu">
+          <ul>{/* Thêm các mục khác tương tự */}</ul>
+        </div>
+      )}
+    </nav>
+  );
+};
 
 const Header = () => {
   const [keyword, setKeyword] = useState("");
@@ -103,7 +101,9 @@ const Header = () => {
 
   const fetchSearchResults = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/search?q=${keyword}`);
+      const response = await fetch(
+        `http://localhost:5000/api/search?q=${keyword}`
+      );
       if (!response.ok) {
         throw new Error("Có lỗi xảy ra khi tìm kiếm");
       }
