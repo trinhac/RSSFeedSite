@@ -111,14 +111,14 @@
   display: none;
   position: absolute;
   top: 100%;
-  left: -4450%;
+  left: -4050%;
   background-color: #2c3e50;
   color: white;
   padding: 10px 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   z-index: 10;
   border-radius: 5px;
-  width: 4370%;
+  width: 4000%;
   height: 200%;
 }
 
@@ -136,7 +136,7 @@
 
 .dropdown-menu li {
   padding: 15px 0;
-  font-size: 100%;
+  font-size: 24px;
   cursor: pointer;
 }
 
