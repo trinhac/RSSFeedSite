@@ -27,12 +27,16 @@ const CategoryArticles = () => {
       "the-gioi": "Thế giới",
       "thoi-su": "Thời sự",
       "kinh-te": "Kinh tế",
-      "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
-      xe: "Xe",
-      "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+      "giai-tri": "Giải trí",
       "the-thao": "Thể thao",
       "phap-luat-chinh-tri": "Pháp luật - Chính trị",
       "giao-duc": "Giáo dục",
+      "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+      "du-lich": "Du lịch",
+      "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
+      xe: "Xe",
+      "van-hoa": "Văn hóa",
+      "doi-song": "Đời sống",
     };
 
     return categoryMapping[category] || "Không xác định";

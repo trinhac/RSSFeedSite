@@ -246,9 +246,19 @@
   background-color: #f9f9f9; /* Màu nền (tuỳ chọn) */
 }
 
+:root {
+  --background-color: #fff;
+  --text-color: #000;
+}
+
+.dark-mode {
+  --background-color: #111;
+  --text-color: #fff;
+}
+
 .partners-section {
-  background-color: #111;
-  color: #fff;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
@@ -260,7 +270,7 @@
 .partners-section h3 {
   margin-bottom: 15px;
   font-size: 18px;
-  color: #fff;
+  color: red;
 }
 
 .partners-container {
@@ -282,9 +292,9 @@
   align-items: center;
   justify-content: space-between; /* Đảm bảo khoảng cách đều giữa logo và tên */
   text-decoration: none;
-  color: #fff;
   border: 1px solid #333;
-  background-color: #222;
+  background-color: var(--background-color);
+  color: var(--text-color);
   transition: transform 0.3s;
   flex-shrink: 0;
   padding: 10px; /* Thêm khoảng đệm để không gian thoáng hơn */
