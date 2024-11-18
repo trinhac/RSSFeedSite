@@ -11,6 +11,9 @@ venv/
 # Logs
 *.log
 
+VnCoreNLP/
+VnCoreNLP-1.1.1.jar
+
 # IDE-related files
 .vscode/
 .idea/

@@ -4,9 +4,13 @@
 * Add test data to MongoDB Compass
 - Create a *"xml_rss"* database in MongoDB Compass then create a *"test_json_xml"* collection. Import test_data.json in rss_data folder to *test_json_xml* collection.
 
-* Frontend.
+#### Frontend.
 - `cd Frontend` then run `npm i` after the packages are finished downloading then run `npm start`.
 
-* Backend.
+#### Backend.
 - `cd Backend\server` then run `npm i` after the packages are finished downloading then run `npm start`.
 
+#### VnCoreNLP Microservices
+To run the VnCoreNLP microservices for extracting trending keywords first you need to:
+- Download the VnCoreNLP repo from this link [VnCoreNLP](https://github.com/vncorenlp/VnCoreNLP)
+- `cd vncorenlp_microservice`
