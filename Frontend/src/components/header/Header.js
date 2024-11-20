@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import "font-awesome/css/font-awesome.min.css";
 
 // Header Title Component
 const HeaderTitle = ({ onClick }) => (
-  <h1 onClick={onClick}>Diễn Đàn Tin Tức Việt Nam</h1>
+  <div className="header-title">
+    <h1 onClick={onClick}>Diễn Đàn Tin Tức Việt Nam</h1>
+    <p className="sub-title">- Sản phẩm của sinh viên Hoa Sen -</p>
+  </div>
 );
 
 // Date Display Component
@@ -48,51 +51,73 @@ const SearchBar = ({ keyword, onChange, onSearch }) => {
 };
 
 // Navigation Menu Component
-const NavMenu = ({ onHomeClick, isMenuOpen, toggleMenu }) => {
+const NavMenu = ({ onHomeClick }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Hook để theo dõi đường dẫn
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Hàm để điều hướng tới trang danh mục
+  // Đóng menu mỗi khi URL thay đổi
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
+
   const navigateToCategory = (category) => {
     navigate(`/category/${category}`);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
   };
 
   return (
     <nav className="nav">
       <ul>
         <li>
-          <i className="fa fa-home" onClick={onHomeClick}></i>{" "}
+          <i className="fa fa-home" onClick={onHomeClick}></i>
         </li>
         <li onClick={() => navigateToCategory("the-gioi")}>Thế giới</li>
         <li onClick={() => navigateToCategory("thoi-su")}>Thời sự</li>
         <li onClick={() => navigateToCategory("kinh-te")}>Kinh tế</li>
-        <li onClick={() => navigateToCategory("khoa-hoc-cong-nghe")}>
-          Khoa học - Công nghệ
-        </li>
-        <li onClick={() => navigateToCategory("xe")}>Xe</li>
-        <li onClick={() => navigateToCategory("suc-khoe-doi-song")}>
-          Sức khỏe
-        </li>
+        <li onClick={() => navigateToCategory("giai-tri")}>Giải trí</li>
         <li onClick={() => navigateToCategory("the-thao")}>Thể thao</li>
-        <li onClick={() => navigateToCategory("phap-luat-chinh-tri")}>
-          Pháp luật
-        </li>
         <li onClick={() => navigateToCategory("giao-duc")}>Giáo dục</li>
-        <li onClick={toggleMenu} className="menu-icon">
-          ☰
+        <li onClick={() => navigateToCategory("du-lich")}>Du lịch</li>
+        <li onClick={() => navigateToCategory("xe")}>Xe</li>
+        <li onClick={() => navigateToCategory("van-hoa")}>Văn hóa</li>
+        <li onClick={() => navigateToCategory("doi-song")}>Đời sống</li>
+        {/* Biểu tượng ☰ và menu con */}
+        <li className="menu-wrapper">
+          <span className="menu-icon" onClick={toggleDropdown}>
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png"
+              alt="Menu"
+              className="menu-icon-image"
+            />
+          </span>
+
+          {isDropdownOpen && (
+            <div className="dropdown-menu">
+              <ul>
+                <li onClick={() => navigateToCategory("phap-luat-chinh-tri")}>
+                  Pháp luật - Chính trị
+                </li>
+                <li onClick={() => navigateToCategory("suc-khoe-doi-song")}>
+                  Sức khỏe - Đời sống
+                </li>
+                <li onClick={() => navigateToCategory("khoa-hoc-cong-nghe")}>
+                  Khoa học - Công nghệ
+                </li>
+              </ul>
+            </div>
+          )}
         </li>
       </ul>
-      {isMenuOpen && (
-        <div className="dropdown-menu">
-          <ul>{/* Thêm các mục khác tương tự */}</ul>
-        </div>
-      )}
     </nav>
   );
 };
 
 const Header = () => {
   const [keyword, setKeyword] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -116,10 +141,6 @@ const Header = () => {
 
   const handleTitleClick = () => navigate("/");
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
     <div className="main-header">
       <header className="header">
@@ -132,11 +153,7 @@ const Header = () => {
         />
       </header>
       <div className="second-header">
-        <NavMenu
-          onHomeClick={handleTitleClick}
-          isMenuOpen={isMenuOpen}
-          toggleMenu={toggleMenu}
-        />
+        <NavMenu onHomeClick={handleTitleClick} />
       </div>
     </div>
   );
