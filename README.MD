@@ -17,7 +17,8 @@ To run the VnCoreNLP microservices for extracting trending keywords first you ne
 - Extract to Desktop, then go to folder `Backend/vncorenlp_microservice` and create a VnCoreNLP folder.
 - Copy the `VnCoreNLP-1.1.1.jar` file and `models` folder and paste to `VnCoreNLP` folder in `vncorenlp_microservice` that have been created before.
 - If you have python installed and already add path to system variable, run following commands:
-```python -m venv env
+```
+python -m venv env
 ./env/Scripts/activate
 pip install -r requirements.txt
 ```
