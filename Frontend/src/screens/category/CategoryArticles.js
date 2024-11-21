@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { fetchCategoryArticles } from "../../redux/category/categorySlice";
 import "./CategoryArticles.css";
 
 const CategoryArticles = () => {
   const { category } = useParams();
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { articles, loading, error } = useSelector((state) => state.category);
+
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 8;
 
-  // Functions from SearchScreen
   const getLogoUrl = (source) => {
     if (/thanhnien\.vn/.test(source)) {
       return "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg";
@@ -53,27 +55,17 @@ const CategoryArticles = () => {
   };
 
   useEffect(() => {
-    const fetchArticlesByCategory = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/news/topic?topic=${category}`
-        );
-        const data = await response.json();
-        setArticles(data);
-      } catch (error) {
-        console.error("Error fetching articles:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchArticlesByCategory();
-    setCurrentPage(1); // Reset to the first page when search results change
-  }, [category]);
+    // Disable scroll restoration to force scroll to top
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    // Scroll to top on component mount or refresh
+    window.scrollTo(0, 0);
+    dispatch(fetchCategoryArticles(category));
+    setCurrentPage(1); // Reset to the first page when the category changes
+  }, [category, dispatch]);
 
-  const sortedArticles = articles.sort(
-    (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
-  );
-
+  const sortedArticles = articles || [];
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = sortedArticles.slice(
@@ -84,12 +76,21 @@ const CategoryArticles = () => {
 
   const nextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    window.scrollTo(0, 0);
   };
   const prevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
+    window.scrollTo(0, 0);
   };
-  const firstPage = () => setCurrentPage(1);
-  const lastPage = () => setCurrentPage(totalPages);
+  const firstPage = () => {
+    setCurrentPage(1);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the first page
+  };
+
+  const lastPage = () => {
+    setCurrentPage(totalPages);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the last page
+  };
 
   const ArticleList = () => (
     <div className="articles-list">
@@ -147,6 +148,8 @@ const CategoryArticles = () => {
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
         <p>Đang tải...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
       ) : articles.length === 0 ? (
         <div className="no-results">
           <div className="no-results-icon">🔍</div>
