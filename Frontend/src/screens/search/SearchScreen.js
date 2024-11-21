@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./SearchScreen.css";
 
 const SearchScreen = () => {
   const location = useLocation();
   const searchResults = location.state?.searchResults || [];
-
+  const initialKeyword = useSelector((state) => state.search.keyword);
+  const [keyword, setKeyword] = useState(initialKeyword);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedResults, setSortedResults] = useState([]);
@@ -41,13 +43,22 @@ const SearchScreen = () => {
     return { title, description, pubDate, imageUrl, link, sourceLogo };
   };
 
-  useEffect(() => {
-    const parsedArticles = searchResults.map(parseArticles);
-    const sortedArticles = sortArticlesByDate(parsedArticles);
-    setSortedResults(sortedArticles);
-    setCurrentPage(1); // Reset to the first page when search results change
-    setLoading(false);
-  }, [searchResults]);
+  useEffect(
+    () => {
+      // Cập nhật từ khóa khi có dữ liệu tìm kiếm mới
+      if (location.state?.searchResults) {
+        setKeyword(initialKeyword); // Cập nhật từ khóa
+      }
+
+      const parsedArticles = searchResults.map(parseArticles);
+      const sortedArticles = sortArticlesByDate(parsedArticles);
+      setSortedResults(sortedArticles);
+      setCurrentPage(1); // Reset to the first page when search results change
+      setLoading(false);
+    },
+    [searchResults],
+    [location.state?.searchResults, initialKeyword]
+  );
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
@@ -60,14 +71,21 @@ const SearchScreen = () => {
   // Pagination functions
   const nextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    window.scrollTo(0, 0);
   };
-
   const prevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
+    window.scrollTo(0, 0);
+  };
+  const firstPage = () => {
+    setCurrentPage(1);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the first page
   };
 
-  const firstPage = () => setCurrentPage(1);
-  const lastPage = () => setCurrentPage(totalPages);
+  const lastPage = () => {
+    setCurrentPage(totalPages);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the last page
+  };
 
   // Date formatting function
   const formatDate = (dateString) => {
@@ -136,7 +154,7 @@ const SearchScreen = () => {
   // Main SearchScreen component
   return (
     <div className="search-screen">
-      <h1>Kết quả tìm kiếm</h1>
+      <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
       {loading ? (
         <p>Đang tải...</p>
       ) : sortedResults.length === 0 ? (

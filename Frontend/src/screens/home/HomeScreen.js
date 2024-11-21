@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchNews } from "../../redux/home/newsSlice";
+import { fetchTrending } from "../../redux/home/trendingSlice";
+import { setKeyword } from "../..//redux/search/searchSlice";
 import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
@@ -13,7 +17,6 @@ const ErrorMessage = ({ error, onRetry }) => (
   </div>
 );
 
-// Updated LoadingSpinner from the old HomeScreen
 const LoadingSpinner = () => (
   <div className="loading">
     <ClipLoader color="#3498db" size={50} />
@@ -66,6 +69,50 @@ export const MainNewsCard = ({ article }) => (
     </a>
   </div>
 );
+
+export const TopKeywordSection = ({ keywords }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleKeywordClick = async (keyword) => {
+    dispatch(setKeyword(keyword)); // Cập nhật từ khóa trong Redux
+
+    try {
+      // Gọi API tìm kiếm ngay lập tức
+      const response = await fetch(
+        `http://localhost:5000/api/search?q=${keyword}`
+      );
+      if (!response.ok) {
+        throw new Error("Có lỗi xảy ra khi tìm kiếm");
+      }
+      const data = await response.json();
+
+      // Chuyển hướng sang trang tìm kiếm với kết quả
+      navigate("/search", { state: { searchResults: data, q: keyword } });
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm:", error);
+    }
+  };
+
+  return (
+    <div className="keyword-section">
+      <div id="top-keywords" className="top-keywords-container">
+        <h3 className="keywords-title">🔥 Top Từ Khóa</h3>
+        <ul className="keywords-list">
+          {keywords.map((item, index) => (
+            <li
+              key={index}
+              className="keyword-item"
+              onClick={() => handleKeywordClick(item.keyword)}
+            >
+              <span className="keyword-rank">{index + 1}.</span> {item.keyword}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 export const SecondaryNewsSection = ({ articles }) => (
   <div className="secondary-news">
@@ -222,34 +269,29 @@ export const PartnersSection = () => {
   );
 };
 const HomeScreen = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  // Sử dụng useSelector để lấy trạng thái từ Redux
+  const { articles, loading, error } = useSelector((state) => state.news);
+  const {
+    keywords,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useSelector((state) => state.trending);
+
   const [visibleOverflowCount, setVisibleOverflowCount] = useState(50);
 
   useEffect(() => {
-    fetchArticles();
-  }, []);
-
-  const fetchArticles = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get("http://localhost:5000/api/news/all");
-      const data = response.data.map((item) => ({
-        ...item,
-        pubDate: new Date(item.pubDate),
-      }));
-
-      const sortedArticles = data.sort((a, b) => b.pubDate - a.pubDate);
-      setArticles(sortedArticles);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setError(error.message || "Error loading data.");
-    } finally {
-      setLoading(false);
+    // Disable scroll restoration to force scroll to top
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
     }
-  }, []);
+    // Scroll to top on component mount or refresh
+    window.scrollTo(0, 0);
+    // Gọi action fetchNews khi HomeScreen được render
+    dispatch(fetchNews());
+    dispatch(fetchTrending()); // Fetch trending keywords
+  }, [dispatch]);
 
   const MainNews = articles[0];
   const TopThreeSecondaryNews = articles.slice(1, 4);
@@ -270,9 +312,15 @@ const HomeScreen = () => {
           <NewsTicker articles={articles} />
           <div className="home-container">
             {error ? (
-              <ErrorMessage error={error} onRetry={fetchArticles} />
+              <ErrorMessage
+                error={error}
+                onRetry={() => dispatch(fetchNews())}
+              />
             ) : (
               <div className="news-layout">
+                <div className="first-column">
+                  <TopKeywordSection keywords={keywords} />
+                </div>
                 <div className="left-column">
                   {MainNews && <MainNewsCard article={MainNews} />}
                   {TopThreeSecondaryNews.length > 0 && (
