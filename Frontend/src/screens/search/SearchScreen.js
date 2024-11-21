@@ -60,14 +60,21 @@ const SearchScreen = () => {
   // Pagination functions
   const nextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    window.scrollTo(0, 0);
   };
-
   const prevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
+    window.scrollTo(0, 0);
+  };
+  const firstPage = () => {
+    setCurrentPage(1);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the first page
   };
 
-  const firstPage = () => setCurrentPage(1);
-  const lastPage = () => setCurrentPage(totalPages);
+  const lastPage = () => {
+    setCurrentPage(totalPages);
+    window.scrollTo(0, 0); // Scroll to top when navigating to the last page
+  };
 
   // Date formatting function
   const formatDate = (dateString) => {
