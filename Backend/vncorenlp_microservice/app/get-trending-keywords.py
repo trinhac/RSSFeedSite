@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from vncorenlp import VnCoreNLP
 from datetime import datetime, timedelta
 from collections import defaultdict, Counter
+from apscheduler.schedulers.background import BackgroundScheduler
 import os
 
 # Flask app setup
@@ -12,6 +13,9 @@ app = Flask(__name__)
 client = MongoClient("mongodb://localhost:27017")
 db = client["xml_rss"]  # Replace with your database name
 collection = db["test_json_xml"]  # Replace with your collection name
+
+# Collection for storing precomputed keywords
+precomputed_collection = db["precomputed_keywords"]
 
 # VnCoreNLP setup
 VNCORENLP_JAR_PATH = "VnCoreNLP/VnCoreNLP-1.1.1.jar"
@@ -105,22 +109,49 @@ def identify_trending_keywords(keywords_by_time, recent_days=7):
 
     return sorted(trending_keywords.items(), key=lambda x: x[1], reverse=True)
 
-# Flask endpoints
+def precompute_trending_keywords():
+    """
+    Precompute the top 500 trending keywords and store them in a MongoDB collection.
+    """
+    print("Starting precomputation of trending keywords...")
+    keywords_by_time = extract_trending_keywords_by_time(time_interval="day")
+    trending_keywords = identify_trending_keywords(keywords_by_time, recent_days=7)
+
+    # Get the top 500 keywords
+    top_keywords = trending_keywords[:500]
+
+    # Save to a new collection
+    precomputed_collection.delete_many({})  # Clear old data
+    precomputed_collection.insert_one({
+        "timestamp": datetime.utcnow(),
+        "keywords": top_keywords
+    })
+    print("Trending keywords precomputation completed.")
+
 @app.route("/api/trending_keywords", methods=["GET"])
 def get_trending_keywords():
     """
-    Endpoint to get trending keywords based on time intervals.
-    Query parameters:
-        time_interval: "day" or "week" (default is "day")
-        recent_days: Number of recent days to analyze (default is 7)
+    Endpoint to get the top 500 precomputed trending keywords.
     """
-    time_interval = request.args.get("time_interval", "day")
-    recent_days = int(request.args.get("recent_days", 7))
+    latest_data = precomputed_collection.find_one(sort=[("timestamp", -1)])  # Get the latest entry
 
-    keywords_by_time = extract_trending_keywords_by_time(time_interval=time_interval)
-    trending_keywords = identify_trending_keywords(keywords_by_time, recent_days=recent_days)
+    if not latest_data:
+        return jsonify({"error": "No precomputed keywords available."}), 404
 
-    return jsonify({"trending_keywords": trending_keywords})
+    return jsonify({"timestamp": latest_data["timestamp"], "keywords": latest_data["keywords"]})
+
+@app.route("/api/top_10_keywords", methods=["GET"])
+def get_top_10_keywords():
+    """
+    Endpoint to get the top 10 keywords from the precomputed data.
+    """
+    latest_data = precomputed_collection.find_one(sort=[("timestamp", -1)])  # Get the latest entry
+
+    if not latest_data:
+        return jsonify({"error": "No precomputed keywords available."}), 404
+
+    top_10_keywords = latest_data["keywords"][:10]
+    return jsonify({"timestamp": latest_data["timestamp"], "top_10_keywords": top_10_keywords})
 
 @app.route("/api/keywords_by_time", methods=["GET"])
 def get_keywords_by_time():
@@ -140,27 +171,15 @@ def get_keywords_by_time():
 
     return jsonify({"keywords_by_time": keywords_by_time_serialized})
 
-@app.route("/api/top_10_keywords", methods=["GET"])
-def get_top_keywords():
-    """
-    Endpoint to get the top 10 keywords based on time intervals.
-    Query parameters:
-        time_interval: "day" or "week" (default is "day")
-        recent_days: Number of recent days to analyze (default is 7)
-    """
-    time_interval = request.args.get("time_interval", "day")
-    recent_days = int(request.args.get("recent_days", 7))
+# Initialize and start the scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(precompute_trending_keywords, 'interval', minutes=1)
+scheduler.start()
 
-    # Extract and identify trending keywords
-    keywords_by_time = extract_trending_keywords_by_time(time_interval=time_interval)
-    trending_keywords = identify_trending_keywords(keywords_by_time, recent_days=recent_days)
-
-    # Get the top 10 keywords
-    top_keywords = trending_keywords[:10]  # Get top 10 entries from sorted trending keywords
-
-    return jsonify({"top_keywords": top_keywords})
-
+# Ensure the scheduler shuts down gracefully
+import atexit
+atexit.register(lambda: scheduler.shutdown())
 
 # Run the Flask app
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=6000)
