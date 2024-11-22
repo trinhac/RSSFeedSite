@@ -40,14 +40,24 @@ const SearchScreen = () => {
     const link = item.link || "#";
     const imageUrl = item.img || "/default-image.jpg"; // Sử dụng `img` từ dữ liệu hoặc ảnh mặc định
     const sourceLogo = getLogoUrl(item.url);
+    const arrangedCategory = item.arrangedCategory || "No category";
 
-    return { title, description, pubDate, imageUrl, link, sourceLogo };
+    return {
+      title,
+      description,
+      pubDate,
+      imageUrl,
+      link,
+      sourceLogo,
+      arrangedCategory,
+    };
   };
 
   useEffect(
     () => {
       // Cập nhật từ khóa khi có dữ liệu tìm kiếm mới
       if (location.state?.searchResults) {
+        setSelectedCategory("");
         setKeyword(initialKeyword); // Cập nhật từ khóa
       }
 
@@ -63,11 +73,6 @@ const SearchScreen = () => {
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = sortedResults.slice(
-    indexOfFirstArticle,
-    indexOfLastArticle
-  );
-  const totalPages = Math.ceil(sortedResults.length / articlesPerPage);
 
   // Pagination functions
   const nextPage = () => {
@@ -152,6 +157,20 @@ const SearchScreen = () => {
     </div>
   );
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const filteredArticles = sortedResults.filter(
+    (article) =>
+      !selectedCategory || article.arrangedCategory === selectedCategory
+  );
+
+  const currentArticles = filteredArticles.slice(
+    indexOfFirstArticle,
+    indexOfLastArticle
+  );
+
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+
   // Main SearchScreen component
   return (
     <div className="search-container">
@@ -165,17 +184,27 @@ const SearchScreen = () => {
             "kinh-te": "Kinh tế",
             "giai-tri": "Giải trí",
             "the-thao": "Thể thao",
-            "phap-luat-chinh-tri": "Pháp luật - Chính trị",
             "giao-duc": "Giáo dục",
-            "suc-khoe-doi-song": "Sức khỏe - Đời sống",
             "du-lich": "Du lịch",
-            "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
             xe: "Xe",
             "van-hoa": "Văn hóa",
             "doi-song": "Đời sống",
+            "phap-luat-chinh-tri": "Pháp luật - Chính trị",
+            "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+            "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
           }).map(([key, value]) => (
             <li key={key}>
-              <button className="category-button">{value}</button>
+              <button
+                className={`category-button ${
+                  selectedCategory === key ? "active" : ""
+                }`}
+                onClick={() => {
+                  setSelectedCategory(key);
+                  setCurrentPage(1); // Reset to the first page
+                }}
+              >
+                {value}
+              </button>
             </li>
           ))}
         </ul>
@@ -188,7 +217,7 @@ const SearchScreen = () => {
           <div className="loading">
             <ClipLoader color="#3498db" size={50} />
           </div>
-        ) : sortedResults.length === 0 ? (
+        ) : filteredArticles.length === 0 ? ( // Kiểm tra filteredArticles thay vì sortedResults
           <div className="no-results">
             <div className="no-results-icon">🔍</div>
             <p>Không tìm thấy kết quả</p>
