@@ -145,7 +145,7 @@ const CategoryArticles = () => {
   );
 
   return (
-    <div className="search-screen">
+    <div className="category-screen">
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
         <div className="loading">

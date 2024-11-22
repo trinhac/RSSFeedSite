@@ -154,23 +154,52 @@ const SearchScreen = () => {
 
   // Main SearchScreen component
   return (
-    <div className="search-screen">
-      <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
-      {loading ? (
-        <div className="loading">
-          <ClipLoader color="#3498db" size={50} />
+    <div className="search-container">
+      <div className="right-column-search">
+        <h2>Danh mục bài viết</h2>
+        <ul className="category-list">
+          {Object.entries({
+            "": "Tất cả",
+            "the-gioi": "Thế giới",
+            "thoi-su": "Thời sự",
+            "kinh-te": "Kinh tế",
+            "giai-tri": "Giải trí",
+            "the-thao": "Thể thao",
+            "phap-luat-chinh-tri": "Pháp luật - Chính trị",
+            "giao-duc": "Giáo dục",
+            "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+            "du-lich": "Du lịch",
+            "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
+            xe: "Xe",
+            "van-hoa": "Văn hóa",
+            "doi-song": "Đời sống",
+          }).map(([key, value]) => (
+            <li key={key}>
+              <button className="category-button">{value}</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="search-screen">
+        <div className="result-title">
+          <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
         </div>
-      ) : sortedResults.length === 0 ? (
-        <div className="no-results">
-          <div className="no-results-icon">🔍</div>
-          <p>Không tìm thấy kết quả</p>
-        </div>
-      ) : (
-        <>
-          <ArticleList />
-          <Pagination />
-        </>
-      )}
+        {loading ? (
+          <div className="loading">
+            <ClipLoader color="#3498db" size={50} />
+          </div>
+        ) : sortedResults.length === 0 ? (
+          <div className="no-results">
+            <div className="no-results-icon">🔍</div>
+            <p>Không tìm thấy kết quả</p>
+          </div>
+        ) : (
+          <>
+            <ArticleList />
+            <Pagination />
+          </>
+        )}
+      </div>
     </div>
   );
 };
