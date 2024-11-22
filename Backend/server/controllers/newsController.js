@@ -97,19 +97,3 @@ exports.getAllArticles = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-exports.getArticlesByCategory = async (req, res) => {
-  try {
-    const { category } = req.query; // Lấy category từ query params
-
-    if (!category) {
-      return res.status(400).json({ message: "Category is required" });
-    }
-
-    const articles = await News.find({ arrangedCategory: category }); // Tìm kiếm bài viết theo arrangedCategory
-    res.status(200).json(articles);
-  } catch (error) {
-    console.error("Error fetching articles by category:", error);
-    res.status(500).json({ message: "Error fetching articles by category" });
-  }
-};
