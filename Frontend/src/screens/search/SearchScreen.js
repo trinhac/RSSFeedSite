@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./SearchScreen.css";
 import { ClipLoader } from "react-spinners";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const SearchScreen = () => {
   const location = useLocation();
@@ -214,11 +216,11 @@ const SearchScreen = () => {
           <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
         </div>
         {loading ? (
-          <div className="loading">
+          <div className="loading-search">
             <ClipLoader color="#3498db" size={50} />
           </div>
         ) : filteredArticles.length === 0 ? ( // Kiểm tra filteredArticles thay vì sortedResults
-          <div className="no-results">
+          <div className="no-results-search">
             <div className="no-results-icon">🔍</div>
             <p>Không tìm thấy kết quả</p>
           </div>
@@ -228,6 +230,8 @@ const SearchScreen = () => {
             <Pagination />
           </>
         )}
+        <ThemeToggle />
+        <ScrollToTop />
       </div>
     </div>
   );

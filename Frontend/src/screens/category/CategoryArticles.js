@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { fetchCategoryArticles } from "../../redux/category/categorySlice";
 import "./CategoryArticles.css";
 import { ClipLoader } from "react-spinners";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const CategoryArticles = () => {
   const { category } = useParams();
@@ -162,6 +164,8 @@ const CategoryArticles = () => {
         <>
           <ArticleList />
           <Pagination />
+          <ThemeToggle />
+          <ScrollToTop />
         </>
       )}
     </div>

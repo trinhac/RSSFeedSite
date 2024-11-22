@@ -72,3 +72,17 @@
   font-size: 14px;
   color: #ecf0f1;
 }
+
+.link-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+.link-button:hover {
+  color: #f1c40f;
+}

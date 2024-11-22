@@ -7,6 +7,8 @@ import { setKeyword } from "../..//redux/search/searchSlice";
 import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/600x400";
 
@@ -346,6 +348,8 @@ const HomeScreen = () => {
               </button>
             )}
           </div>
+          <ThemeToggle />
+          <ScrollToTop />
         </>
       )}
     </>

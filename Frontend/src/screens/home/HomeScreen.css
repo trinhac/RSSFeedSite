@@ -124,12 +124,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.secondary-news-card:hover {
-  background-color: #f5f5f5; /* Change the background color */
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
 .additional-news {
   display: flex;
   flex-direction: column; /* Ensures each news card is stacked vertically */
@@ -144,8 +138,9 @@
   color: inherit; /* Inherit text color from parent */
 }
 
-.additional-news-card:hover {
-  background-color: #f9f9f9; /* Optional: Add hover effect */
+.additional-news-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 
 .additional-news-image {
@@ -196,8 +191,9 @@
   color: inherit; /* Ensure text color matches the theme */
 }
 
-.additional-news-second-part-card:hover {
-  background-color: #f9f9f9; /* Optional hover effect */
+.additional-news-second-part-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 
 .additional-news-second-part-card-img {
@@ -213,13 +209,6 @@
   object-fit: contain; /* Scales the logo without distortion */
 }
 
-.additional-news-info-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
-}
-
 /* Load More Button Styling */
 .load-more-container {
   display: flex;
@@ -229,26 +218,26 @@
 
 .load-more-button {
   padding: 10px;
-  background-color: white;
   border: 2px solid transparent;
-  color: black;
+  color: var(--text-color); /* Sử dụng màu chữ dựa trên chế độ */
+  background-color: var(--background-color); /* Sử dụng màu nền của chế độ */
   font-size: 18px;
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng chuyển đổi */
 }
 
 .load-more-button:hover {
-  background-color: #e0e0e0;
-  border-color: #ccc;
-  
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
-  background-color: #f9f9f9; /* Màu nền (tuỳ chọn) */
+  background-color: var(--background-color); /* Màu nền (tuỳ chọn) */
 }
 
 :root {
