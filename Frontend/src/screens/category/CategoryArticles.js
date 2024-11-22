@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchCategoryArticles } from "../../redux/category/categorySlice";
 import "./CategoryArticles.css";
+import { ClipLoader } from "react-spinners";
 
 const CategoryArticles = () => {
   const { category } = useParams();
@@ -147,7 +148,9 @@ const CategoryArticles = () => {
     <div className="search-screen">
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
-        <p>Đang tải...</p>
+        <div className="loading">
+          <ClipLoader color="#3498db" size={50} />
+        </div>
       ) : error ? (
         <p className="error-message">{error}</p>
       ) : articles.length === 0 ? (

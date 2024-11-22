@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./SearchScreen.css";
+import { ClipLoader } from "react-spinners";
 
 const SearchScreen = () => {
   const location = useLocation();
@@ -156,7 +157,9 @@ const SearchScreen = () => {
     <div className="search-screen">
       <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
       {loading ? (
-        <p>Đang tải...</p>
+        <div className="loading">
+          <ClipLoader color="#3498db" size={50} />
+        </div>
       ) : sortedResults.length === 0 ? (
         <div className="no-results">
           <div className="no-results-icon">🔍</div>
