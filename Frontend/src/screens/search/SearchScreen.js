@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./SearchScreen.css";
+import { ClipLoader } from "react-spinners";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const SearchScreen = () => {
   const location = useLocation();
   const searchResults = location.state?.searchResults || [];
-
+  const initialKeyword = useSelector((state) => state.search.keyword);
+  const [keyword, setKeyword] = useState(initialKeyword);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedResults, setSortedResults] = useState([]);
@@ -37,25 +42,39 @@ const SearchScreen = () => {
     const link = item.link || "#";
     const imageUrl = item.img || "/default-image.jpg"; // Sử dụng `img` từ dữ liệu hoặc ảnh mặc định
     const sourceLogo = getLogoUrl(item.url);
+    const arrangedCategory = item.arrangedCategory || "No category";
 
-    return { title, description, pubDate, imageUrl, link, sourceLogo };
+    return {
+      title,
+      description,
+      pubDate,
+      imageUrl,
+      link,
+      sourceLogo,
+      arrangedCategory,
+    };
   };
 
-  useEffect(() => {
-    const parsedArticles = searchResults.map(parseArticles);
-    const sortedArticles = sortArticlesByDate(parsedArticles);
-    setSortedResults(sortedArticles);
-    setCurrentPage(1); // Reset to the first page when search results change
-    setLoading(false);
-  }, [searchResults]);
+  useEffect(
+    () => {
+      // Cập nhật từ khóa khi có dữ liệu tìm kiếm mới
+      if (location.state?.searchResults) {
+        setSelectedCategory("");
+        setKeyword(initialKeyword); // Cập nhật từ khóa
+      }
+
+      const parsedArticles = searchResults.map(parseArticles);
+      const sortedArticles = sortArticlesByDate(parsedArticles);
+      setSortedResults(sortedArticles);
+      setCurrentPage(1); // Reset to the first page when search results change
+      setLoading(false);
+    },
+    [searchResults],
+    [location.state?.searchResults, initialKeyword]
+  );
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = sortedResults.slice(
-    indexOfFirstArticle,
-    indexOfLastArticle
-  );
-  const totalPages = Math.ceil(sortedResults.length / articlesPerPage);
 
   // Pagination functions
   const nextPage = () => {
@@ -140,23 +159,80 @@ const SearchScreen = () => {
     </div>
   );
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const filteredArticles = sortedResults.filter(
+    (article) =>
+      !selectedCategory || article.arrangedCategory === selectedCategory
+  );
+
+  const currentArticles = filteredArticles.slice(
+    indexOfFirstArticle,
+    indexOfLastArticle
+  );
+
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+
   // Main SearchScreen component
   return (
-    <div className="search-screen">
-      <h1>Kết quả tìm kiếm</h1>
-      {loading ? (
-        <p>Đang tải...</p>
-      ) : sortedResults.length === 0 ? (
-        <div className="no-results">
-          <div className="no-results-icon">🔍</div>
-          <p>Không tìm thấy kết quả</p>
+    <div className="search-container">
+      <div className="right-column-search">
+        <h2>Danh mục bài viết</h2>
+        <ul className="category-list">
+          {Object.entries({
+            "": "Tất cả",
+            "the-gioi": "Thế giới",
+            "thoi-su": "Thời sự",
+            "kinh-te": "Kinh tế",
+            "giai-tri": "Giải trí",
+            "the-thao": "Thể thao",
+            "giao-duc": "Giáo dục",
+            "du-lich": "Du lịch",
+            xe: "Xe",
+            "van-hoa": "Văn hóa",
+            "doi-song": "Đời sống",
+            "phap-luat-chinh-tri": "Pháp luật - Chính trị",
+            "suc-khoe-doi-song": "Sức khỏe - Đời sống",
+            "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
+          }).map(([key, value]) => (
+            <li key={key}>
+              <button
+                className={`category-button ${
+                  selectedCategory === key ? "active" : ""
+                }`}
+                onClick={() => {
+                  setSelectedCategory(key);
+                  setCurrentPage(1); // Reset to the first page
+                }}
+              >
+                {value}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="search-screen">
+        <div className="result-title">
+          <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
         </div>
-      ) : (
-        <>
-          <ArticleList />
-          <Pagination />
-        </>
-      )}
+        {loading ? (
+          <div className="loading-search">
+            <ClipLoader color="#3498db" size={50} />
+          </div>
+        ) : filteredArticles.length === 0 ? ( // Kiểm tra filteredArticles thay vì sortedResults
+          <div className="no-results-search">
+            <div className="no-results-icon">🔍</div>
+            <p>Không tìm thấy kết quả</p>
+          </div>
+        ) : (
+          <>
+            <ArticleList />
+            <Pagination />
+          </>
+        )}
+        <ThemeToggle />
+        <ScrollToTop />
+      </div>
     </div>
   );
 };

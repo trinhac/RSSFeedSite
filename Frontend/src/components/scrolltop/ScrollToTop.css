@@ -1,0 +1,35 @@
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 80px; /* Kéo vị trí nút ra xa nút ThemeToggle */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--toggle-bg-color, #fff);
+    color: var(--toggle-color, #000);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .scroll-to-top:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Khi ở chế độ tối */
+  body.dark-mode .scroll-to-top {
+    background-color: var(--toggle-bg-color-dark, #333);
+    color: var(--toggle-color-dark, #fff);
+  }
+  

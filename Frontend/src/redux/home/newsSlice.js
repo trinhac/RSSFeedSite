@@ -6,9 +6,9 @@ export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
   const response = await axios.get("http://localhost:5000/api/news/all");
   const data = response.data.map((item) => ({
     ...item,
-    pubDate: new Date(item.pubDate),
+    pubDate: new Date(item.pubDate).toISOString(), // Chuyển đổi sang chuỗi ISO
   }));
-  return data.sort((a, b) => b.pubDate - a.pubDate); // Sắp xếp theo thời gian
+  return data.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)); // Sắp xếp theo thời gian
 });
 
 const newsSlice = createSlice({

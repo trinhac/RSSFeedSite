@@ -10,9 +10,10 @@ export const fetchCategoryArticles = createAsyncThunk(
     );
     const data = response.data.map((item) => ({
       ...item,
-      pubDate: new Date(item.pubDate),
+      pubDate: new Date(item.pubDate).toISOString(),
     }));
-    return data.sort((a, b) => b.pubDate - a.pubDate); // Sort by publish date
+    return data.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)); // Sort by publish date
+
   }
 );
 

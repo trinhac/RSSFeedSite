@@ -1,19 +1,16 @@
 /* SearchScreen.css */
 
-.search-screen {
+.category-screen {
   padding: 20px;
 }
 
 .articles-list {
   display: flex;
   flex-direction: column;
-  padding-top: 2%;
-  padding-bottom: 3%;
-  padding-left: 10%;
-  padding-right: 10%;
 }
 
 .article-item {
+  width: 105%;
   border: 1px solid #ddd;
   border-radius: 8px;
   transition: box-shadow 0.3s ease;
@@ -50,10 +47,11 @@ a {
 .article-content {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 .article-text {
   margin-left: 1%;
-  margin-bottom: 5%;
+  margin-bottom: 0%;
 }
 
 .source-logo {
@@ -117,6 +115,8 @@ margin-bottom: 10px;
 overflow: hidden;
 text-overflow: ellipsis;
 font-size: 17px;
+color: var(--text-color);
+font-size: 24px;
 }
 
 .nav ul {

@@ -1,5 +1,6 @@
 import React from "react";
 import "./Footer.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Component AboutSection
 const AboutSection = () => (
@@ -10,12 +11,14 @@ const AboutSection = () => (
 );
 
 // Component LinksSection
-const LinksSection = () => (
+const LinksSection = ({ navigateToHome }) => (
   <div className="footer-section">
     <h3>Quick Links</h3>
     <ul>
       <li>
-        <a href="#home">Home</a>
+        <button onClick={navigateToHome} className="link-button">
+          Home
+        </button>
       </li>
       <li>
         <a href="#contact">Contact Us</a>
@@ -46,11 +49,17 @@ const FooterBottom = () => (
 
 // Component chính Footer
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const navigateToHome = () => {
+    navigate(`/trang-chu`);
+  };
+
   return (
     <footer className="footer">
       <div className="footer-content">
         <AboutSection />
-        <LinksSection />
+        <LinksSection navigateToHome={navigateToHome} />
         <SocialSection />
       </div>
       <FooterBottom />

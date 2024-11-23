@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchCategoryArticles } from "../../redux/category/categorySlice";
 import "./CategoryArticles.css";
+import { ClipLoader } from "react-spinners";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const CategoryArticles = () => {
   const { category } = useParams();
@@ -144,10 +147,13 @@ const CategoryArticles = () => {
   );
 
   return (
-    <div className="search-screen">
+    <div className="category-screen">
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
-        <p>Đang tải...</p>
+
+        <div className="loading">
+          <ClipLoader color="#3498db" size={50} />
+        </div>
       ) : error ? (
         <p className="error-message">{error}</p>
       ) : articles.length === 0 ? (
@@ -159,6 +165,8 @@ const CategoryArticles = () => {
         <>
           <ArticleList />
           <Pagination />
+          <ThemeToggle />
+          <ScrollToTop />
         </>
       )}
     </div>

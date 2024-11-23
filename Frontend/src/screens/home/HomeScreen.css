@@ -6,22 +6,27 @@
 
 .news-layout {
   display: flex;
-  width: 70%;
+  width: 95%;
   gap: 20px;
   align-items: stretch;
+}
+
+.first-column {
+  width: 26%;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
   width: 65%;
+  padding-left: 2%;
 }
 
 .right-column {
   width: 35%;
   max-height: 140vh;
   overflow-y: auto;
-  padding-right: 20px;
+  margin-right: 10%;
 }
 
 /* Main News Hover */
@@ -119,12 +124,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.secondary-news-card:hover {
-  background-color: #f5f5f5; /* Change the background color */
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
 .additional-news {
   display: flex;
   flex-direction: column; /* Ensures each news card is stacked vertically */
@@ -139,8 +138,9 @@
   color: inherit; /* Inherit text color from parent */
 }
 
-.additional-news-card:hover {
-  background-color: #f9f9f9; /* Optional: Add hover effect */
+.additional-news-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 
 .additional-news-image {
@@ -191,8 +191,9 @@
   color: inherit; /* Ensure text color matches the theme */
 }
 
-.additional-news-second-part-card:hover {
-  background-color: #f9f9f9; /* Optional hover effect */
+.additional-news-second-part-card:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 
 .additional-news-second-part-card-img {
@@ -208,13 +209,6 @@
   object-fit: contain; /* Scales the logo without distortion */
 }
 
-.additional-news-info-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
-}
-
 /* Load More Button Styling */
 .load-more-container {
   display: flex;
@@ -224,26 +218,26 @@
 
 .load-more-button {
   padding: 10px;
-  background-color: white;
   border: 2px solid transparent;
-  color: black;
+  color: var(--text-color); /* Sử dụng màu chữ dựa trên chế độ */
+  background-color: var(--background-color); /* Sử dụng màu nền của chế độ */
   font-size: 18px;
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng chuyển đổi */
 }
 
 .load-more-button:hover {
-  background-color: #e0e0e0;
-  border-color: #ccc;
-  
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
 }
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
-  background-color: #f9f9f9; /* Màu nền (tuỳ chọn) */
+  background-color: var(--background-color); /* Màu nền (tuỳ chọn) */
 }
 
 :root {
@@ -330,3 +324,89 @@
   animation-play-state: paused;
 }
 
+/* Tổng thể phần từ khóa */
+.keyword-section {
+  background-color: #2c3e50;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+.top-keywords-container {
+  text-align: center;
+}
+
+.keywords-title {
+  color: #ff9f43;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0px 1px 2px rgba(255, 159, 67, 0.7);
+}
+
+.keywords-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyword-item {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 10px 0;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.keyword-item:hover {
+  background-color: #ff9f43;
+  color: #1e1e2f;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 10px rgba(255, 159, 67, 0.5);
+}
+
+.keyword-rank {
+  background-color: #ff4757;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .keyword-section {
+    padding: 15px;
+  }
+
+  .keywords-title {
+    font-size: 1.5rem;
+  }
+
+  .keyword-item {
+    font-size: 1rem;
+  }
+
+  .keyword-rank {
+    font-size: 0.9rem;
+    min-width: 25px;
+    height: 25px;
+  }
+}

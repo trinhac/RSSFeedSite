@@ -1,9 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchNews } from "../../redux/home/newsSlice";
+import { fetchTrending } from "../../redux/home/trendingSlice";
+import { setKeyword } from "../..//redux/search/searchSlice";
 import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
+import ThemeToggle from "../../components/themetoggle/ThemeToggle";
+import ScrollToTop from "../../components/scrolltop/ScrollToTop";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/600x400";
 
@@ -66,6 +71,50 @@ export const MainNewsCard = ({ article }) => (
     </a>
   </div>
 );
+
+export const TopKeywordSection = ({ keywords }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleKeywordClick = async (keyword) => {
+    dispatch(setKeyword(keyword)); // Cập nhật từ khóa trong Redux
+
+    try {
+      // Gọi API tìm kiếm ngay lập tức
+      const response = await fetch(
+        `http://localhost:5000/api/search?q=${keyword}`
+      );
+      if (!response.ok) {
+        throw new Error("Có lỗi xảy ra khi tìm kiếm");
+      }
+      const data = await response.json();
+
+      // Chuyển hướng sang trang tìm kiếm với kết quả
+      navigate("/search", { state: { searchResults: data, q: keyword } });
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm:", error);
+    }
+  };
+
+  return (
+    <div className="keyword-section">
+      <div id="top-keywords" className="top-keywords-container">
+        <h3 className="keywords-title">🔥 Top Từ Khóa</h3>
+        <ul className="keywords-list">
+          {keywords.map((item, index) => (
+            <li
+              key={index}
+              className="keyword-item"
+              onClick={() => handleKeywordClick(item.keyword)}
+            >
+              <span className="keyword-rank">{index + 1}.</span> {item.keyword}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 export const SecondaryNewsSection = ({ articles }) => (
   <div className="secondary-news">
@@ -227,6 +276,11 @@ const HomeScreen = () => {
   // Sử dụng useSelector để lấy trạng thái từ Redux
   const { articles, loading, error } = useSelector((state) => state.news);
 
+  const {
+    keywords,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useSelector((state) => state.trending);
   const [visibleOverflowCount, setVisibleOverflowCount] = useState(50);
 
   useEffect(() => {
@@ -238,6 +292,7 @@ const HomeScreen = () => {
     window.scrollTo(0, 0);
     // Gọi action fetchNews khi HomeScreen được render
     dispatch(fetchNews());
+    dispatch(fetchTrending()); // Fetch trending keywords
   }, [dispatch]);
 
   const MainNews = articles[0];
@@ -265,6 +320,9 @@ const HomeScreen = () => {
               />
             ) : (
               <div className="news-layout">
+                <div className="first-column">
+                  <TopKeywordSection keywords={keywords} />
+                </div>
                 <div className="left-column">
                   {MainNews && <MainNewsCard article={MainNews} />}
                   {TopThreeSecondaryNews.length > 0 && (
@@ -290,6 +348,8 @@ const HomeScreen = () => {
               </button>
             )}
           </div>
+          <ThemeToggle />
+          <ScrollToTop />
         </>
       )}
     </>

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import "font-awesome/css/font-awesome.min.css";
-
+import { setKeyword } from "../..//redux/search/searchSlice";
+import { useDispatch } from "react-redux";
 // Header Title Component
 const HeaderTitle = ({ onClick }) => (
   <div className="header-title">
@@ -27,8 +28,10 @@ const DateDisplay = () => {
 
 // Search Bar Component
 const SearchBar = ({ keyword, onChange, onSearch }) => {
+  const dispatch = useDispatch();
   const handleKeyPress = (e) => {
     if (e.key === "Enter") onSearch();
+    dispatch(setKeyword(keyword));
   };
 
   return (
@@ -38,7 +41,7 @@ const SearchBar = ({ keyword, onChange, onSearch }) => {
         placeholder="Search..."
         value={keyword}
         onChange={onChange}
-        onKeyPress={handleKeyPress}
+        onKeyUpCapture={handleKeyPress}
       />
       <button type="submit" onClick={onSearch}>
         <img
@@ -119,6 +122,7 @@ const NavMenu = ({ onHomeClick }) => {
 const Header = () => {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation(); // Theo dõi sự thay đổi URL
 
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
@@ -140,6 +144,10 @@ const Header = () => {
   };
 
   const handleTitleClick = () => navigate("/");
+  // Reset từ khóa khi URL thay đổi
+  useEffect(() => {
+    setKeyword("");
+  }, [location.pathname]);
 
   return (
     <div className="main-header">
