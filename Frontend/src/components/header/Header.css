@@ -146,10 +146,16 @@
 }
 
 .menu-icon-image {
-  width: 24px; /* Điều chỉnh kích thước icon */
+  width: 24px;
   height: 24px;
   cursor: pointer;
   margin-top: 6px;
+  filter: invert(0%); /* Icon mặc định màu đen */
+  transition: filter 0.3s; /* Thêm hiệu ứng mượt */
+}
+
+body.dark-mode .menu-icon-image {
+  filter: invert(100%); /* Icon đổi thành màu trắng */
 }
 
   

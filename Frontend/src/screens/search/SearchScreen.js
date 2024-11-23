@@ -68,6 +68,10 @@ const SearchScreen = () => {
       setSortedResults(sortedArticles);
       setCurrentPage(1); // Reset to the first page when search results change
       setLoading(false);
+
+      // Tính số lượng bài viết cho từng danh mục
+      const counts = calculateCategoryCounts(parsedArticles);
+      setCategoryCounts(counts);
     },
     [searchResults],
     [location.state?.searchResults, initialKeyword]
@@ -173,6 +177,21 @@ const SearchScreen = () => {
 
   const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
 
+  const [categoryCounts, setCategoryCounts] = useState({});
+
+  // Hàm tính số lượng bài viết cho từng danh mục
+  const calculateCategoryCounts = (articles) => {
+    const counts = articles.reduce((counts, article) => {
+      const category = article.arrangedCategory || "No category";
+      counts[category] = (counts[category] || 0) + 1;
+      return counts;
+    }, {});
+
+    // Thêm danh mục "Tất cả" ("" key) với tổng số bài viết
+    counts[""] = articles.length;
+    return counts;
+  };
+
   // Main SearchScreen component
   return (
     <div className="search-container">
@@ -194,21 +213,24 @@ const SearchScreen = () => {
             "phap-luat-chinh-tri": "Pháp luật - Chính trị",
             "suc-khoe-doi-song": "Sức khỏe - Đời sống",
             "khoa-hoc-cong-nghe": "Khoa học - Công nghệ",
-          }).map(([key, value]) => (
-            <li key={key}>
-              <button
-                className={`category-button ${
-                  selectedCategory === key ? "active" : ""
-                }`}
-                onClick={() => {
-                  setSelectedCategory(key);
-                  setCurrentPage(1); // Reset to the first page
-                }}
-              >
-                {value}
-              </button>
-            </li>
-          ))}
+          }).map(([key, value]) => {
+            const count = categoryCounts[key] || 0; // Số lượng bài viết cho danh mục
+            return (
+              <li key={key}>
+                <button
+                  className={`category-button ${
+                    selectedCategory === key ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedCategory(key);
+                    setCurrentPage(1); // Reset về trang đầu
+                  }}
+                >
+                  {value} ({count})
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="search-screen">
