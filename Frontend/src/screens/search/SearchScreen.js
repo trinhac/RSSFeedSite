@@ -235,7 +235,11 @@ const SearchScreen = () => {
       </div>
       <div className="search-screen">
         <div className="result-title">
-          <h1>Kết quả tìm kiếm cho từ khóa: {keyword || "Không có"}</h1>
+          <h1>
+            {keyword
+              ? `Kết quả tìm kiếm cho từ khóa: ${keyword}`
+              : "Vui lòng nhập từ khóa trên thanh tìm kiếm"}
+          </h1>
         </div>
         {loading ? (
           <div className="loading-search">

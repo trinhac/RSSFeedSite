@@ -26,7 +26,6 @@ const LoadingSpinner = () => (
 );
 
 const handleImageError = (e, url) => {
-  console.error(`Failed to load image: ${url}`);
   e.target.src = FALLBACK_IMAGE_URL;
 };
 
