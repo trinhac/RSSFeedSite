@@ -1,5 +1,5 @@
 .news-ticker {
-  width: 100%; /* Full width */
+  width: 95%; /* Full width */
   background-color: var(--background-color); /* Màu nền dựa trên chế độ */
   color: var(--text-color); /* Màu chữ dựa trên chế độ */
   overflow: hidden; /* Hide overflowing content */
