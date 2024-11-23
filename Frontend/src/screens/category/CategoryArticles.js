@@ -150,6 +150,7 @@ const CategoryArticles = () => {
     <div className="category-screen">
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
+
         <div className="loading">
           <ClipLoader color="#3498db" size={50} />
         </div>

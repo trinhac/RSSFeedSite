@@ -13,6 +13,7 @@ export const fetchCategoryArticles = createAsyncThunk(
       pubDate: new Date(item.pubDate).toISOString(),
     }));
     return data.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)); // Sort by publish date
+
   }
 );
 

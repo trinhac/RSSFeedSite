@@ -275,12 +275,12 @@ const HomeScreen = () => {
 
   // Sử dụng useSelector để lấy trạng thái từ Redux
   const { articles, loading, error } = useSelector((state) => state.news);
+
   const {
     keywords,
     loading: trendingLoading,
     error: trendingError,
   } = useSelector((state) => state.trending);
-
   const [visibleOverflowCount, setVisibleOverflowCount] = useState(50);
 
   useEffect(() => {
