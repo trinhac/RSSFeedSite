@@ -63,7 +63,7 @@
 
 .main-news-info span {
   font-size: 18px; /* Consistent text size */
-  color: #666;
+  color: var(--text-color);
   white-space: nowrap;
   display: inline-block;
 }
@@ -115,7 +115,7 @@
 
 .secondary-news-info span {
   font-size: 12px; /* Adjust font size to be smaller */
-  color: #666;
+  color: var(--text-color);
   white-space: nowrap; /* Prevent text from wrapping */
 }
 
@@ -177,7 +177,7 @@
 
 .additional-news-info span {
   font-size: 0.85rem;
-  color: #555;
+  color: var(--text-color);
 }
 
 .additional-news-second-part-card {
