@@ -32,7 +32,7 @@
 /* Main News Hover */
 /* Main News Styling */
 .main-news {
-  font-size: 2rem;
+  font-size: 1.5rem;
   position: relative;
   border-radius: 10px; /* Smooth edges */
   overflow: hidden; /* Prevents content from going outside rounded edges */
@@ -40,8 +40,8 @@
 }
 
 .main-news-image {
-  margin-bottom: -20px;
-  width: 660px;
+  margin-bottom: -30px;
+  width: 100%;
   transition: transform 0.3s ease-in-out; /* Smooth transition for the image */
 }
 
@@ -157,7 +157,7 @@
 }
 
 .additional-news-info h4 {
-  font-size: 1rem;
+  font-size: 1.3rem;
   margin: 0; /* Removes extra space around the header */
   font-weight: bold;
 }
@@ -180,6 +180,9 @@
   color: var(--text-color);
 }
 
+.additional-news-second-part h2{
+  font-size: 30px;
+}
 .additional-news-second-part-card {
   display: flex;
   flex-direction: row;
@@ -197,13 +200,99 @@
 }
 
 .additional-news-second-part-card-img {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 150px;
   object-fit: cover;
   border-radius: 5px;
 }
 
 .additional-news-logo-2 {
+  width: 60px; /* Smaller logo size */
+  height: 60px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-right {
+  display: flex;
+  flex-direction: column; /* Ensures each news card is stacked vertically */
+  gap: 15px; /* Adds space between the cards */
+}
+
+.additional-news-card-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Inherit text color from parent */
+}
+
+.additional-news-card-right:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
+}
+
+.additional-news-image-right {
+  width: 100px; /* Fixed width for the thumbnail */
+  height: 100px; /* Fixed height for the thumbnail */
+  object-fit: cover; /* Keeps the aspect ratio intact */
+  border-radius: 5px; /* Rounded corners for the image */
+}
+
+.additional-news-info-right {
+  display: flex;
+  flex-direction: column; /* Organizes content vertically */
+  justify-content: flex-start; /* Align content to the top */
+}
+
+.additional-news-info-right h4 {
+  font-size: 1.1rem;
+  margin: 0; /* Removes extra space around the header */
+  font-weight: bold;
+}
+
+.additional-news-info-row-right {
+  display: flex;
+  align-items: center; /* Align logo and time vertically */
+  gap: 10px; /* Space between the logo and the time */
+  margin-top: 5px; /* Adds space below the header */
+}
+
+.additional-news-logo-1-right {
+  width: 50px; /* Smaller logo size */
+  height: 50px;
+  object-fit: contain; /* Scales the logo without distortion */
+}
+
+.additional-news-info-right span {
+  font-size: 0.85rem;
+  color: var(--text-color);
+  margin-bottom: 7px;
+}
+
+.additional-news-second-part-card-right {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Ensure text color matches the theme */
+}
+
+.additional-news-second-part-card-right:hover img {
+  transform: scale(1.05); /* Slightly enlarge the image */
+  transition: transform 0.3s ease-in-out;
+}
+
+.additional-news-second-part-card-img-right {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.additional-news-logo-2-right {
   width: 60px; /* Smaller logo size */
   height: 60px;
   object-fit: contain; /* Scales the logo without distortion */
@@ -409,4 +498,24 @@
     min-width: 25px;
     height: 25px;
   }
+}
+
+.view-more-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.view-more-button:hover {
+  background-color: #2874a6;
+}
+.btn-xemtatca {
+  display: flex;
+  justify-content: center;
 }
