@@ -6,14 +6,13 @@ export const fetchCategoryArticles = createAsyncThunk(
   "category/fetchCategoryArticles",
   async (category) => {
     const response = await axios.get(
-      `http://localhost:5000/api/news/topic?topic=${category}`
+      `http://localhost:5000/api/category?category=${category}`
     );
     const data = response.data.map((item) => ({
       ...item,
       pubDate: new Date(item.pubDate).toISOString(),
     }));
     return data.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)); // Sort by publish date
-
   }
 );
 
