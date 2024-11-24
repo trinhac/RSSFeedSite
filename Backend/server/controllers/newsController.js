@@ -1,35 +1,5 @@
 const News = require("../models/News");
 
-exports.getNewsByDate = async (req, res) => {
-  try {
-    const { date } = req.query;
-    const news = await News.find({ date: new Date(date) });
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.getNewsByTopic = async (req, res) => {
-  try {
-    const { topic } = req.query;
-    const news = await News.find({ topic });
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.getNewsByKeyword = async (req, res) => {
-  try {
-    const { keyword } = req.query;
-    const news = await News.find({ keywords: keyword });
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 exports.getCategories = async (req, res) => {
   try {
     const categories = await News.distinct("arrangedCategory");
@@ -37,12 +7,16 @@ exports.getCategories = async (req, res) => {
       "the-gioi",
       "thoi-su",
       "kinh-te",
-      "khoa-hoc-cong-nghe",
-      "xe",
-      "suc-khoe-doi-song",
+      "giai-tri",
       "the-thao",
       "phap-luat-chinh-tri",
       "giao-duc",
+      "suc-khoe-doi-song",
+      "du-lich",
+      "khoa-hoc-cong-nghe",
+      "xe",
+      "van-hoa",
+      "doi-song",
     ];
 
     const filteredCategories = categories.filter((cat) =>
@@ -55,10 +29,10 @@ exports.getCategories = async (req, res) => {
   }
 };
 
-exports.getNewsByTopic = async (req, res) => {
+exports.getNewsByCategory = async (req, res) => {
   try {
-    const { topic } = req.query; // Get the category from the query params
-    const news = await News.find({ arrangedCategory: topic });
+    const { category } = req.query; // Get the category from the query params
+    const news = await News.find({ arrangedCategory: category });
     res.json(news);
   } catch (error) {
     res.status(500).json({ message: error.message });
