@@ -5,7 +5,7 @@ export const fetchTrending = createAsyncThunk(
   "trending/fetchTrending",
   async () => {
     const response = await axios.get(
-      "http://localhost:9999/api/top_10_keywords"
+      "http://localhost:5000/api/top-10-keywords"
     );
 
     // Xử lý dữ liệu để loại bỏ dấu gạch dưới
