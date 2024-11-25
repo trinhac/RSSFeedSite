@@ -6,7 +6,7 @@ export const fetchCategoryArticles = createAsyncThunk(
   "category/fetchCategoryArticles",
   async (category) => {
     const response = await axios.get(
-      `http://localhost:5000/api/category?category=${category}`
+      `http://localhost:2048/api/category?category=${category}`
     );
     const data = response.data.map((item) => ({
       ...item,

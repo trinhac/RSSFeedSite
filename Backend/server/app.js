@@ -4,7 +4,7 @@ const cors = require("cors");
 const newsRoutes = require('./routes/newsRoutes');
 
 const app = express();
-const PORT = 5000;
+const PORT = 2048;
 
 connectDB();
 app.use(cors());

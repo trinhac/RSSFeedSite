@@ -112,7 +112,7 @@ export const TopKeywordSection = ({ keywords }) => {
     try {
       // Gọi API tìm kiếm ngay lập tức
       const response = await fetch(
-        `http://localhost:5000/api/search?q=${keyword}`
+        `http://localhost:2048/api/search?q=${keyword}`
       );
       if (!response.ok) {
         throw new Error("Có lỗi xảy ra khi tìm kiếm");
