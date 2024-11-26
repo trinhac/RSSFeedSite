@@ -24,7 +24,7 @@
 
 .right-column {
   width: 35%;
-  max-height: 140vh;
+  max-height: 100%;
   overflow-y: auto;
   margin-right: 10%;
 }
@@ -37,6 +37,10 @@
   border-radius: 10px; /* Smooth edges */
   overflow: hidden; /* Prevents content from going outside rounded edges */
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover animation */
+}
+
+.main-news h2 {
+  margin-left: 10px;
 }
 
 .main-news-image {
@@ -52,6 +56,7 @@
   gap: 20px; /* Add space between logo and time */
   position: relative; /* Keep the info in place */
   bottom: 0; /* No offset, keeping it visible */
+  margin-left: 10px;
 }
 
 .main-news-logo {
@@ -70,7 +75,7 @@
 
 /* Hover Effect */
 .main-news:hover {
-  transform: scale(1.05); /* Slightly enlarge the entire component */
+  transform: scale(1.0); /* Slightly enlarge the entire component */
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
 }
 
@@ -79,8 +84,7 @@
 }
 
 .main-news:hover .main-news-info {
-  transform: scale(1.05); /* Enlarge the logo and time */
-  margin-left: 20px;
+  transform: scale(1.00); /* Enlarge the logo and time */
 }
 
 .secondary-news {
@@ -518,4 +522,8 @@
 .btn-xemtatca {
   display: flex;
   justify-content: center;
+}
+.wordcloud-div {
+  max-width: 100%;
+  max-height: 100%;
 }
