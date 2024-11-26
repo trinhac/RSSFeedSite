@@ -10,6 +10,7 @@ import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
 import ThemeToggle from "../../components/themetoggle/ThemeToggle";
 import ScrollToTop from "../../components/scrolltop/ScrollToTop";
+import TrendingWordCloud from "../../components/wordcloud/TrendingWordCloud";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/600x400";
 
@@ -429,7 +430,7 @@ const HomeScreen = () => {
             ) : (
               <div className="news-layout">
                 <div className="first-column">
-                  <TopKeywordSection keywords={keywords} />
+                  <TopKeywordSection keywords={keywords.slice(0, 10)} />
                 </div>
                 <div className="left-column">
                   {MainNews && <MainNewsCard article={MainNews} />}
@@ -454,6 +455,9 @@ const HomeScreen = () => {
                     <AdditionalNews articles={AdditionalNewsArticles} />
                   )}
                   <PartnersSection />
+                  <div className="wordcloud-div">
+                    <TrendingWordCloud data={keywords.slice(0, 20)} />
+                  </div>
                 </div>
               </div>
             )}
