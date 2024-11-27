@@ -29,6 +29,8 @@ const SearchScreen = () => {
       return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
     } else if (/nhandan\.vn/.test(source)) {
       return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
+    } else if (/dantri\.com\.vn/.test(source)) {
+      return "https://icdn.dantri.com.vn/2022/12/14/3-1671004462503.png";
     } else {
       return "";
     }
