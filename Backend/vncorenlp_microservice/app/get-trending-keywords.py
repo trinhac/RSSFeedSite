@@ -7,6 +7,7 @@ from collections import defaultdict, Counter
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS
 import os
+import re
 
 # Flask app setup
 app = Flask(__name__)
@@ -38,18 +39,33 @@ STOP_WORDS = load_stop_words()
 
 # Define supported date formats
 DATE_FORMATS = [
-    "%a, %d %b %Y %H:%M:%S %z",  # Format for vnexpress.net
-    "%a, %d %b %y %H:%M:%S %z",  # Format for thanhnien.vn
-    "%Y-%m-%d %H:%M:%S"          # Format for nhandan.vn
+    "%a, %d %b %Y %H:%M:%S %z",       # vnexpress.net, dantri
+    "%a, %d %b %y %H:%M:%S %z",       # thanhnien.vn
+    "%Y-%m-%d %H:%M:%S",              # nhandan.vn
+    "%a, %d %b %Y %H:%M:%S GMT%z"     # tuoi tre
 ]
 
 
 def parse_pub_date(pub_date):
+    # Try to parse using predefined formats
     for date_format in DATE_FORMATS:
         try:
             return datetime.strptime(pub_date, date_format)
         except ValueError:
             continue
+
+    # Handle special cases like "GMT+7"
+    match = re.match(r"^(.*) GMT([+-]\d+)$", pub_date)
+    if match:
+        base_date, offset = match.groups()
+        try:
+            parsed_date = datetime.strptime(base_date, "%a, %d %b %Y %H:%M:%S")
+            offset_hours = int(offset)
+            parsed_date += timedelta(hours=offset_hours)
+            return parsed_date
+        except ValueError:
+            pass
+
     print(f"Failed to parse pubDate: {pub_date}")
     return None
 
@@ -122,6 +138,7 @@ def identify_trending_keywords(keywords_by_time, recent_days=7):
 
     return sorted(trending_keywords.items(), key=lambda x: x[1], reverse=True)
 
+
 def precompute_trending_keywords():
     """
     Precompute the top 500 trending keywords and store them in a MongoDB collection.
@@ -142,6 +159,7 @@ def precompute_trending_keywords():
     })
     print("Trending keywords precomputation completed.")
 
+
 @app.route("/api/trending_keywords", methods=["GET"])
 def get_trending_keywords():
     """
@@ -154,6 +172,7 @@ def get_trending_keywords():
         return jsonify({"error": "No precomputed keywords available."}), 404
 
     return jsonify({"timestamp": latest_data["timestamp"], "keywords": latest_data["keywords"]})
+
 
 @app.route("/api/top_10_keywords", methods=["GET"])
 def get_top_10_keywords():
@@ -189,9 +208,10 @@ def get_keywords_by_time():
 
     return jsonify({"keywords_by_time": keywords_by_time_serialized})
 
+
 # Initialize and start the scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(precompute_trending_keywords, 'interval', minutes=1)
+scheduler.add_job(precompute_trending_keywords, 'interval', minutes=3)
 scheduler.start()
 
 # Ensure the scheduler shuts down gracefully
@@ -200,5 +220,3 @@ atexit.register(lambda: scheduler.shutdown())
 # Run the Flask app
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9999)
-
-

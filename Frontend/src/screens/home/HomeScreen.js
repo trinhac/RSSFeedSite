@@ -60,6 +60,8 @@ const getLogoUrl = (rssUrl) => {
       return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
     } else if (hostname.includes("dantri")) {
       return "https://icdn.dantri.com.vn/2022/12/14/3-1671004462503.png";
+    } else if (hostname.includes("tuoitre")) {
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg/2560px-Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg.png";
     } else {
       return "https://via.placeholder.com/100x50?text=Logo";
     }
@@ -414,7 +416,7 @@ const HomeScreen = () => {
   const MainNews = articles[0];
   const TopThreeSecondaryNews = articles.slice(1, 4);
   const AdditionalNewsArticles = articles.slice(4, 12);
-  const OverflowNews = articles.slice(12, 17);
+  const OverflowNews = articles.slice(12, 30);
   const visibleOverflowNews = OverflowNews.slice(0, visibleOverflowCount);
 
   const handleLoadMore = () => {
