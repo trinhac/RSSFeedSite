@@ -1,5 +1,4 @@
 import React from "react";
-import WordCloud from "react-wordcloud";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./TrendingWordCloud.css";
@@ -10,10 +9,9 @@ const TrendingWordCloud = ({ data }) => {
   const navigate = useNavigate();
 
   const handleKeywordClick = async (keyword) => {
-    dispatch(setKeyword(keyword)); // Cập nhật từ khóa trong Redux
+    dispatch(setKeyword(keyword));
 
     try {
-      // Gọi API tìm kiếm ngay lập tức
       const response = await fetch(
         `http://localhost:2048/api/search?q=${keyword}`
       );
@@ -21,61 +19,58 @@ const TrendingWordCloud = ({ data }) => {
         throw new Error("Có lỗi xảy ra khi tìm kiếm");
       }
       const data = await response.json();
-
-      // Chuyển hướng sang trang tìm kiếm với kết quả
       navigate("/search", { state: { searchResults: data, q: keyword } });
     } catch (error) {
       console.error("Lỗi khi tìm kiếm:", error);
     }
   };
-
-  const maxCount = Math.max(...data.map((d) => d.count));
-  const minCount = Math.min(...data.map((d) => d.count));
-
-  const words = data.map((item) => {
-    let fontSize, color;
-    if (item.count === maxCount) {
-      fontSize = 90;
-      color = "red";
-    } else if (item.count === minCount) {
-      fontSize = 30;
-      color = "orange";
-    } else {
-      fontSize = 50;
-      color = "green";
-    }
-    return {
-      text: item.keyword,
-      value: fontSize,
-      color: color,
-    };
-  });
-
-  const options = {
-    rotations: 1,
-    rotationAngles: [0, 0],
-    fontSizes: [30, 90],
-    fontFamily: "Roboto, Arial, sans-serif",
-    fontWeight: "600",
-    padding: 8,
-    deterministic: true,
-    enableTooltip: false,
-  };
+  // Lấy danh sách count và sắp xếp
+  const counts = [...new Set(data.map((item) => item.count))].sort(
+    (a, b) => b - a
+  );
 
   return (
-    <>
-      <h1 className="trending-title">Xu Hướng</h1>
-      <div className="wordcloud-container">
-        <WordCloud
-          words={words}
-          options={options}
-          callbacks={{
-            getWordColor: (word) => word.color,
-            onWordClick: (word) => handleKeywordClick(word.text), // Gọi hàm khi nhấn vào từ
-          }}
-        />
+    <div className="trending-wordcloud">
+      <div className="title-xuhuong">
+        <h1 className="trending-title">Xu Hướng</h1>
       </div>
-    </>
+      <div className="wordcloud">
+        {data.map((item) => {
+          const fontSize =
+            item.count === counts[0]
+              ? "2.5rem" // Lớn nhất
+              : item.count === counts[1]
+              ? "1.8rem" // Lớn nhì
+              : item.count === counts[2]
+              ? "1.5rem" // Thứ ba
+              : "1rem"; // Nhỏ nhất
+          const color =
+            item.count === counts[0]
+              ? "red" // Lớn nhất
+              : item.count === counts[1]
+              ? "green" // Lớn nhì
+              : item.count === counts[2]
+              ? "blue" // Thứ ba
+              : "orange"; // Nhỏ nhất
+
+          return (
+            <span
+              key={item.keyword}
+              className="wordcloud-item"
+              style={{
+                fontSize,
+                color,
+                margin: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => handleKeywordClick(item.keyword)}
+            >
+              {item.keyword} ▲
+            </span>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
