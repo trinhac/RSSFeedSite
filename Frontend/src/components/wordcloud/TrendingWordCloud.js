@@ -1,27 +1,53 @@
 import React from "react";
 import WordCloud from "react-wordcloud";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./TrendingWordCloud.css";
+import { setKeyword } from "../../redux/search/searchSlice";
 
 const TrendingWordCloud = ({ data }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleKeywordClick = async (keyword) => {
+    dispatch(setKeyword(keyword)); // Cập nhật từ khóa trong Redux
+
+    try {
+      // Gọi API tìm kiếm ngay lập tức
+      const response = await fetch(
+        `http://localhost:2048/api/search?q=${keyword}`
+      );
+      if (!response.ok) {
+        throw new Error("Có lỗi xảy ra khi tìm kiếm");
+      }
+      const data = await response.json();
+
+      // Chuyển hướng sang trang tìm kiếm với kết quả
+      navigate("/search", { state: { searchResults: data, q: keyword } });
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm:", error);
+    }
+  };
+
   const maxCount = Math.max(...data.map((d) => d.count));
   const minCount = Math.min(...data.map((d) => d.count));
 
   const words = data.map((item) => {
     let fontSize, color;
     if (item.count === maxCount) {
-      fontSize = 90; // Từ lớn nhất
-      color = "red"; // Màu đỏ cho từ lớn nhất
+      fontSize = 90;
+      color = "red";
     } else if (item.count === minCount) {
-      fontSize = 30; // Từ nhỏ nhất
-      color = "orange"; // Màu cam cho từ nhỏ nhất
+      fontSize = 30;
+      color = "orange";
     } else {
-      fontSize = 50; // Các từ còn lại
-      color = "green"; // Màu xanh lá cho từ cỡ trung bình
+      fontSize = 50;
+      color = "green";
     }
     return {
       text: item.keyword,
-      value: fontSize, // Sử dụng giá trị cố định đã tính
-      color: color, // Gắn thêm thuộc tính màu
+      value: fontSize,
+      color: color,
     };
   });
 
@@ -38,16 +64,14 @@ const TrendingWordCloud = ({ data }) => {
 
   return (
     <>
-      {/* Tiêu đề nằm ngoài Word Cloud */}
       <h1 className="trending-title">Xu Hướng</h1>
-
-      {/* Word Cloud */}
       <div className="wordcloud-container">
         <WordCloud
           words={words}
           options={options}
           callbacks={{
-            getWordColor: (word) => word.color, // Sử dụng thuộc tính màu của từ
+            getWordColor: (word) => word.color,
+            onWordClick: (word) => handleKeywordClick(word.text), // Gọi hàm khi nhấn vào từ
           }}
         />
       </div>

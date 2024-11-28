@@ -61,6 +61,8 @@ const SearchScreen = () => {
 
   useEffect(
     () => {
+      window.scrollTo(0, 0);
+
       // Cập nhật từ khóa khi có dữ liệu tìm kiếm mới
       if (location.state?.searchResults) {
         setSelectedCategory("");

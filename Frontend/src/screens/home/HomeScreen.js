@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchNews } from "../../redux/home/newsSlice";
 import { fetchTrending } from "../../redux/home/trendingSlice";
 import { fetchCategoryArticles } from "../../redux/category/categorySlice";
-import { setKeyword } from "../..//redux/search/searchSlice";
+import { setKeyword } from "../../redux/search/searchSlice";
 import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
@@ -134,7 +134,7 @@ export const TopKeywordSection = ({ keywords }) => {
   return (
     <div className="keyword-section">
       <div id="top-keywords" className="top-keywords-container">
-        <h3 className="keywords-title">🔥 Top Từ Khóa</h3>
+        <h3 className="keywords-title">🔥Top Từ Khóa Trong 7 ngày</h3>
         <ul className="keywords-list">
           {keywords.map((item, index) => (
             <li

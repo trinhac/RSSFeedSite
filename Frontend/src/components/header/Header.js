@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 const HeaderTitle = ({ onClick }) => (
   <div className="header-title">
     <h1 onClick={onClick}>Diễn Đàn Tin Tức Việt Nam</h1>
-    <p className="sub-title">- Sản phẩm của sinh viên Hoa Sen -</p>
+    <p className="sub-title">- Đồ Án Chuyên Ngành của sinh viên Hoa Sen -</p>
   </div>
 );
 
