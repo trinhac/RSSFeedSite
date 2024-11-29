@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../axios/api";
 
 // Async action to fetch articles by category
 export const fetchCategoryArticles = createAsyncThunk(
   "category/fetchCategoryArticles",
   async (category) => {
-    const response = await axios.get(
+    const response = await api.get(
       `http://localhost:2048/api/category?category=${category}`
     );
     const data = response.data.map((item) => ({

@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../axios/api";
 
 // Async action để fetch dữ liệu từ API
 export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
-  const response = await axios.get("http://localhost:2048/api/news/all");
+  const response = await api.get("http://localhost:2048/api/news/all");
   const data = response.data.map((item) => ({
     ...item,
     pubDate: new Date(item.pubDate).toISOString(), // Chuyển đổi sang chuỗi ISO

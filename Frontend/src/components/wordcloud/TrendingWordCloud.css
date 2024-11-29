@@ -1,10 +1,5 @@
-/* Container chính */
-.trending-container {
-  width: 100%;
-  max-width: 800px; /* Giới hạn chiều rộng */
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px;
+.trending-wordcloud {
+  margin: 5px;
 }
 
 .trending-title {
@@ -23,13 +18,20 @@
   cursor: pointer;
 }
 
-/* Word Cloud */
-.wordcloud-container {
-  padding: 15px;
-  background-color: var(--background-color);
-  border-radius: 10px; /* Bo góc mềm mại */
+.wordcloud {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
+.wordcloud-item {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.wordcloud-item:hover {
+  transform: scale(1.2);
+  text-decoration: underline;
+}

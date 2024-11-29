@@ -4,9 +4,24 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 // Component AboutSection
 const AboutSection = () => (
-  <div className="footer-section">
+  <div className="footer-section about-section">
     <h3>About Us</h3>
-    <p>Diễn đàn tin tức Việt Nam cung cấp thông tin về Việt Nam và thế giới.</p>
+    <ul className="about-list">
+      <li>
+        <strong>Sinh viên thực hiện:</strong>
+        <ul>
+          <li>Trịnh Anh Cường (22119001)</li>
+          <li>Nguyễn Duy Nam (22119001)</li>
+          <li>Nguyễn Tuấn Quốc An (22119001)</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Giảng viên hướng dẫn:</strong>
+        <ul>
+          <li>Nguyễn Hữu Phát</li>
+        </ul>
+      </li>
+    </ul>
   </div>
 );
 

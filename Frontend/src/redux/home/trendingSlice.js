@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../axios/api";
 
 export const fetchTrending = createAsyncThunk(
   "trending/fetchTrending",
   async () => {
-    const response = await axios.get(
+    const response = await api.get(
       "http://localhost:2048/api/trending-keywords"
     );
 

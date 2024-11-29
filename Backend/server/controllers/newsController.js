@@ -4,12 +4,19 @@ const mongoose = require("mongoose");
 exports.getTrendingKeywords = async (req, res) => {
   try {
     // Fetch the latest precomputed keywords
-    const precomputedCollection = mongoose.connection.collection("precomputed_keywords");
+    const precomputedCollection = mongoose.connection.collection(
+      "precomputed_keywords"
+    );
 
-    const latestData = await precomputedCollection.findOne({}, { sort: { timestamp: -1 } });
+    const latestData = await precomputedCollection.findOne(
+      {},
+      { sort: { timestamp: -1 } }
+    );
 
     if (!latestData) {
-      return res.status(404).json({ message: "No precomputed keywords available." });
+      return res
+        .status(404)
+        .json({ message: "No precomputed keywords available." });
     }
 
     res.status(200).json({
@@ -21,8 +28,6 @@ exports.getTrendingKeywords = async (req, res) => {
     res.status(500).json({ message: "Error fetching trending keywords" });
   }
 };
-
-
 
 exports.getCategories = async (req, res) => {
   try {
@@ -73,11 +78,7 @@ exports.searchNews = async (req, res) => {
 
     // Search for the keyword in `title`, `description`, and `authors`
     const results = await News.find({
-      $or: [
-        { title: { $regex: keyword, $options: "i" } },
-        { description: { $regex: keyword, $options: "i" } },
-        { authors: { $in: [new RegExp(keyword, "i")] } },
-      ],
+      $or: [{ title: { $regex: keyword, $options: "i" } }],
     });
 
     res.status(200).json(results);
@@ -98,13 +99,20 @@ exports.getAllArticles = async (req, res) => {
 
 exports.getTop10Keywords = async (req, res) => {
   try {
-    const precomputedCollection = mongoose.connection.collection("precomputed_keywords");
+    const precomputedCollection = mongoose.connection.collection(
+      "precomputed_keywords"
+    );
 
     // Fetch the latest precomputed keywords
-    const latestData = await precomputedCollection.findOne({}, { sort: { timestamp: -1 } });
+    const latestData = await precomputedCollection.findOne(
+      {},
+      { sort: { timestamp: -1 } }
+    );
 
     if (!latestData) {
-      return res.status(404).json({ message: "No precomputed keywords available." });
+      return res
+        .status(404)
+        .json({ message: "No precomputed keywords available." });
     }
 
     // Extract the top 10 keywords
@@ -126,7 +134,9 @@ exports.getKeywordsByTime = async (req, res) => {
 
     // Validate the time interval
     if (!["day", "week"].includes(time_interval)) {
-      return res.status(400).json({ message: "Invalid time interval. Use 'day' or 'week'." });
+      return res
+        .status(400)
+        .json({ message: "Invalid time interval. Use 'day' or 'week'." });
     }
 
     // Extract keywords grouped by time intervals

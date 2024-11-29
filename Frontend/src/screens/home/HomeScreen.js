@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchNews } from "../../redux/home/newsSlice";
 import { fetchTrending } from "../../redux/home/trendingSlice";
 import { fetchCategoryArticles } from "../../redux/category/categorySlice";
-import { setKeyword } from "../..//redux/search/searchSlice";
+import { setKeyword } from "../../redux/search/searchSlice";
 import { ClipLoader } from "react-spinners";
 import "./HomeScreen.css";
 import NewsTicker from "./NewsTicker";
@@ -58,6 +58,10 @@ const getLogoUrl = (rssUrl) => {
       return "https://static.thanhnien.com.vn/thanhnien.vn/image/logo.svg";
     } else if (hostname.includes("nhandan")) {
       return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
+    } else if (hostname.includes("dantri")) {
+      return "https://icdn.dantri.com.vn/2022/12/14/3-1671004462503.png";
+    } else if (hostname.includes("tuoitre")) {
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg/2560px-Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg.png";
     } else {
       return "https://via.placeholder.com/100x50?text=Logo";
     }
@@ -130,7 +134,7 @@ export const TopKeywordSection = ({ keywords }) => {
   return (
     <div className="keyword-section">
       <div id="top-keywords" className="top-keywords-container">
-        <h3 className="keywords-title">🔥 Top Từ Khóa</h3>
+        <h3 className="keywords-title">🔥Top Từ Khóa Trong 7 ngày</h3>
         <ul className="keywords-list">
           {keywords.map((item, index) => (
             <li
@@ -301,6 +305,11 @@ const partners = [
       "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg",
     link: "https://vnexpress.net/",
   },
+  {
+    name: "Dân Trí",
+    logoUrl: "https://icdn.dantri.com.vn/2022/12/14/3-1671004462503.png",
+    link: "https://dantri.com.vn/",
+  },
 ];
 
 export const PartnersSection = () => {
@@ -407,7 +416,7 @@ const HomeScreen = () => {
   const MainNews = articles[0];
   const TopThreeSecondaryNews = articles.slice(1, 4);
   const AdditionalNewsArticles = articles.slice(4, 12);
-  const OverflowNews = articles.slice(12, 17);
+  const OverflowNews = articles.slice(12, 30);
   const visibleOverflowNews = OverflowNews.slice(0, visibleOverflowCount);
 
   const handleLoadMore = () => {

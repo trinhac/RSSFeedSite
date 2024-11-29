@@ -22,6 +22,10 @@ const CategoryArticles = () => {
       return "https://s1.vnecdn.net/vnexpress/restruct/i/v9505/v2_2019/pc/graphics/logo.svg";
     } else if (/nhandan\.vn/.test(source)) {
       return "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png?20221117215128";
+    } else if (/dantri\.com\.vn/.test(source)) {
+      return "https://icdn.dantri.com.vn/2022/12/14/3-1671004462503.png";
+    } else if (/tuoitre\.vn/.test(source)) {
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg/2560px-Tu%E1%BB%95i_Tr%E1%BA%BB_Logo.svg.png";
     } else {
       return "";
     }
@@ -150,7 +154,6 @@ const CategoryArticles = () => {
     <div className="category-screen">
       <h1>Danh mục: {getDisplayCategoryName(category)}</h1>
       {loading ? (
-
         <div className="loading">
           <ClipLoader color="#3498db" size={50} />
         </div>

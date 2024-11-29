@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
+    "axios-cache-interceptor": "^1.6.2",
     "date-fns": "^4.1.0",
     "font-awesome": "^4.7.0",
     "he": "^1.2.0",
@@ -21,7 +22,6 @@
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.14.1",
-    "react-wordcloud": "^1.2.7",
     "web-vitals": "^2.1.4",
     "xml2js": "^0.6.2"
   },
