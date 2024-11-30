@@ -24,34 +24,34 @@ const TrendingWordCloud = ({ data }) => {
       console.error("Lỗi khi tìm kiếm:", error);
     }
   };
-  // Lấy danh sách count và sắp xếp
+
   const counts = [...new Set(data.map((item) => item.count))].sort(
     (a, b) => b - a
   );
 
   return (
     <div className="trending-wordcloud">
-      <div className="title-xuhuong">
+      <div className="title-xuhuong" onClick={() => navigate("/pivot")}>
         <h1 className="trending-title">Xu Hướng</h1>
       </div>
       <div className="wordcloud">
         {data.map((item) => {
           const fontSize =
             item.count === counts[0]
-              ? "2.5rem" // Lớn nhất
+              ? "2.5rem"
               : item.count === counts[1]
-              ? "1.8rem" // Lớn nhì
+              ? "1.8rem"
               : item.count === counts[2]
-              ? "1.5rem" // Thứ ba
-              : "1rem"; // Nhỏ nhất
+              ? "1.5rem"
+              : "1rem";
           const color =
             item.count === counts[0]
-              ? "red" // Lớn nhất
+              ? "red"
               : item.count === counts[1]
-              ? "green" // Lớn nhì
+              ? "green"
               : item.count === counts[2]
-              ? "blue" // Thứ ba
-              : "orange"; // Nhỏ nhất
+              ? "blue"
+              : "orange";
 
           return (
             <span

@@ -10,26 +10,31 @@ import SearchScreen from "./screens/search/SearchScreen";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import CategoryArticles from "./screens/category/CategoryArticles";
+import PivotScreen from "./screens/pivot/PivotScreen";
+import "./App.css";
 
 const App = () => {
   return (
     <Router>
-      <Header />
+      <div className="page-container">
+        {/* Header sẽ nằm trên cùng */}
+        <Header />
 
-      <Routes>
-        {/* Route cho HomeScreen với đường dẫn /trang-chu */}
-        <Route path="/trang-chu" element={<HomeScreen />} />
+        {/* Phần nội dung chính */}
+        <div className="content-wrap">
+          <Routes>
+            {/* Các route của ứng dụng */}
+            <Route path="/trang-chu" element={<HomeScreen />} />
+            <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+            <Route path="/search" element={<SearchScreen />} />
+            <Route path="/category/:category" element={<CategoryArticles />} />
+            <Route path="/pivot" element={<PivotScreen />} />
+          </Routes>
+        </div>
 
-        {/* Route chuyển hướng từ / về /trang-chu */}
-        <Route path="/" element={<Navigate to="/trang-chu" replace />} />
-
-        <Route path="/search" element={<SearchScreen />} />
-        <Route path="/category/:category" element={<CategoryArticles />} />
-
-        <Route path="/" element={<HomeScreen />} />
-      </Routes>
-
-      <Footer />
+        {/* Footer sẽ luôn nằm dưới */}
+        <Footer />
+      </div>
     </Router>
   );
 };
