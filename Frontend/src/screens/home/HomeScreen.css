@@ -417,7 +417,7 @@
   animation-play-state: paused;
 }
 
-/* Tổng thể phần từ khóa */
+/* Top Words Section */
 .keyword-section {
   background-color: #2c3e50;
   padding: 20px;
@@ -427,13 +427,14 @@
 }
 
 .top-keywords-container {
-  text-align: center;
+  text-align: left; /* Align content to the left */
 }
 
 .keywords-title {
   color: #ff9f43;
   font-size: 1.8rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  margin-top: -5px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -453,34 +454,75 @@
   color: #ffffff;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start; /* Align items to the left */
   transition: transform 0.2s, box-shadow 0.2s;
   padding: 8px 15px;
   border-radius: 8px;
   cursor: pointer;
 }
 
+.keyword-item:first-child {
+  background-color: #ff4757; /* Red for first place */
+  border-radius: 10px; /* Smooth edges */
+  font-weight: bold; /* Make it bold */
+  position: relative; /* For dark red stripes effect */
+  overflow: hidden;
+}
+
+.keyword-item:first-child span {
+  position: relative;
+  z-index: 1; /* Keep the text above the stripes */
+}
+
+.keyword-item:first-child:hover {
+  animation: shake 0.5s ease-in-out infinite;
+  transform: scale(1.40); /* Slightly enlarge */
+}
+
+.keyword-item:nth-child(2) {
+  background-color: #f1c40f; /* Yellow for second place */
+  border-radius: 10px;
+  font-weight: bold; /* Make it bold */
+}
+
+.keyword-item:nth-child(3) {
+  background-color: #27ae60; /* Green for third place */
+  border-radius: 10px;
+  font-weight: bold; /* Make it bold */
+}
+
 .keyword-item:hover {
-  background-color: #ff9f43;
-  color: #1e1e2f;
   transform: translateY(-2px);
   box-shadow: 0px 4px 10px rgba(255, 159, 67, 0.5);
 }
 
-.keyword-rank {
-  background-color: #ff4757;
-  color: #ffffff;
-  font-weight: bold;
-  font-size: 1rem;
-  padding: 5px 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 30px;
-  height: 30px;
-  text-align: center;
+/* Shake Animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) scale(1.05); /* Maintain size when not shaking */
+  }
+  25% {
+    transform: translateX(-5px) scale(1.05);
+  }
+  50% {
+    transform: translateX(5px) scale(1.05);
+  }
+  75% {
+    transform: translateX(-3px) scale(1.05);
+  }
+}
+
+/* Divider Lines */
+.main-news + .secondary-news {
+  border-top: 2px solid #2c3e50; /* Same color as the top words outer box */
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.secondary-news + .additional-news-right {
+  border-top: 2px solid #2c3e50; /* Same color as the top words outer box */
+  margin-top: 20px;
+  padding-top: 20px;
 }
 
 /* Responsive */
