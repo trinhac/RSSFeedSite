@@ -1,4 +1,9 @@
 /* SearchScreen.css */
+.article-keyword {
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
 .category-screen {
   padding: 20px;
@@ -134,3 +139,14 @@ font-size: 24px;
 .nav ul li {
   cursor: pointer;
 }
+
+.category-name {
+  margin-left: 11.5rem
+}
+.trending-articles-section {
+  margin-left: 11.5rem
+}
+.normal-articles-section {
+  margin-left: 11.5rem
+}
+

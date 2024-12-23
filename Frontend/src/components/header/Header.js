@@ -4,13 +4,23 @@ import "./Header.css";
 import "font-awesome/css/font-awesome.min.css";
 import { setKeyword } from "../..//redux/search/searchSlice";
 import { useDispatch } from "react-redux";
+
+// Header Title Component
+const logo = "/assets/images/logo/TinVietLogo_1@4x.png";
+
 // Header Title Component
 const HeaderTitle = ({ onClick }) => (
   <div className="header-title">
-    <h1 onClick={onClick}>Diễn Đàn Tin Tức Việt Nam</h1>
+    <img
+      src={logo} // Đường dẫn đã sửa
+      alt="Diễn Đàn Tin Tức Việt Nam"
+      onClick={onClick}
+      className="header-logo" // CSS class để tùy chỉnh hình ảnh logo
+    />
     <p className="sub-title">- Đồ Án Chuyên Ngành của sinh viên Hoa Sen -</p>
   </div>
 );
+
 
 // Date Display Component
 const DateDisplay = () => {

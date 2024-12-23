@@ -197,9 +197,9 @@ async function downloadRSS() {
     "https://nhandan.vn/rss/khoahoc-congnghe-1292.rss": "khoa-hoc-cong-nghe",
     "https://dantri.com.vn/rss/khoa-hoc-cong-nghe.rss": "khoa-hoc-cong-nghe",
     "https://tuoitre.vn/rss/nhip-song-so.rss": "khoa-hoc-cong-nghe",
-    "https://tuoitre.vn/rss/xe.rss": "xe",
-
+    
     // Xe
+    "https://tuoitre.vn/rss/xe.rss": "xe",
     "https://vnexpress.net/rss/oto-xe-may.rss": "xe",
     "https://thanhnien.vn/rss/xe.rss": "xe",
     "https://dantri.com.vn/rss/o-to-xe-may.rss": "xe",

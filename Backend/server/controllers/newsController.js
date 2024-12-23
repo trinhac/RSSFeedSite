@@ -154,3 +154,199 @@ exports.getKeywordsByTime = async (req, res) => {
     res.status(500).json({ message: "Error fetching keywords by time" });
   }
 };
+
+const CategorizedKeywords = mongoose.connection.collection("categorized_keywords");
+
+exports.getKeywordsByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    // Kiểm tra nếu category không được cung cấp
+    if (!category) {
+      return res.status(400).json({ message: "Category is required." });
+    }
+
+    // Truy vấn từ collection categorized_keywords
+    const categoryData = await CategorizedKeywords.findOne({ category });
+
+    // Nếu không tìm thấy dữ liệu
+    if (!categoryData) {
+      return res.status(404).json({ message: "No data found for this category." });
+    }
+
+    // Trả về dữ liệu của danh mục
+    res.status(200).json({
+      category: categoryData.category,
+      timestamp: categoryData.timestamp,
+      keywords: categoryData.keywords,
+    });
+  } catch (error) {
+    console.error("Error fetching keywords by category:", error);
+    res.status(500).json({ message: "Error fetching keywords by category" });
+  }
+};
+
+exports.getTop5KeywordsByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    // Kiểm tra nếu category không được cung cấp
+    if (!category) {
+      return res.status(400).json({ message: "Category is required." });
+    }
+
+    // Truy vấn từ collection categorized_keywords
+    const categoryData = await CategorizedKeywords.findOne({ category });
+
+    // Nếu không tìm thấy dữ liệu
+    if (!categoryData) {
+      return res.status(404).json({ message: "No data found for this category." });
+    }
+
+    // Lấy top 5 từ khóa dựa trên số lượng (thứ hai trong mảng)
+    const top5Keywords = categoryData.keywords
+      .sort((a, b) => b[1] - a[1]) // Sắp xếp giảm dần theo số lượng
+      .slice(0, 5) // Lấy 5 từ khóa đầu tiên
+      .map(([keyword, count]) => ({ keyword, count })); // Định dạng lại dữ liệu
+
+    // Trả về dữ liệu
+    res.status(200).json({
+      category: categoryData.category,
+      topKeywords: top5Keywords,
+    });
+  } catch (error) {
+    console.error("Error fetching top 5 keywords by category:", error);
+    res.status(500).json({ message: "Error fetching top 5 keywords by category" });
+  }
+};
+
+
+exports.getTop20KeywordsByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    // Kiểm tra nếu category không được cung cấp
+    if (!category) {
+      return res.status(400).json({ message: "Category is required." });
+    }
+
+    // Truy vấn từ collection categorized_keywords
+    const categoryData = await CategorizedKeywords.findOne({ category });
+
+    // Nếu không tìm thấy dữ liệu
+    if (!categoryData) {
+      return res.status(404).json({ message: "No data found for this category." });
+    }
+
+    // Lấy top 20 từ khóa dựa trên số lượng (thứ hai trong mảng)
+    const top20Keywords = categoryData.keywords
+      .sort((a, b) => b[1] - a[1]) // Sắp xếp giảm dần theo số lượng
+      .slice(0, 20) // Lấy 20 từ khóa đầu tiên
+      .map(([keyword, count]) => ({ keyword, count })); // Định dạng lại dữ liệu
+
+    // Trả về dữ liệu
+    res.status(200).json({
+      category: categoryData.category,
+      topKeywords: top20Keywords,
+    });
+  } catch (error) {
+    console.error("Error fetching top 20 keywords by category:", error);
+    res.status(500).json({ message: "Error fetching top 20 keywords by category" });
+  }
+};
+
+
+exports.getArticlesByTopKeywords = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    if (!category) {
+      return res.status(400).json({ message: "Category is required." });
+    }
+
+    // Retrieve category data
+    const categoryData = await CategorizedKeywords.findOne({ category });
+    if (!categoryData) {
+      return res.status(404).json({ message: "Category not found." });
+    }
+
+    // Normalize keywords
+    const normalizedKeywords = normalizeKeywords(
+      categoryData.keywords.map(([keyword]) => keyword)
+    );
+
+    const topKeywords = normalizedKeywords.slice(0, 5);
+
+    let articlesWithKeywords = [];
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    for (const keyword of topKeywords) {
+      const relatedArticles = await News.find({
+        title: { $regex: keyword, $options: "i" },
+        pubDate: { $gte: sevenDaysAgo }, // Filter articles within the last 7 days
+      })
+        .limit(5)
+        .lean();
+
+      const articlesWithKeyword = relatedArticles.map((article) => ({
+        ...article,
+        keyword,
+      }));
+
+      articlesWithKeywords = articlesWithKeywords.concat(articlesWithKeyword);
+    }
+
+    // Sort articles by keyword rank
+    articlesWithKeywords.sort((a, b) => {
+      const rankA = topKeywords.findIndex((keyword) => keyword === a.keyword);
+      const rankB = topKeywords.findIndex((keyword) => keyword === b.keyword);
+      return rankA - rankB;
+    });
+
+    res.status(200).json({
+      category: categoryData.category,
+      topKeywords,
+      articles: articlesWithKeywords,
+    });
+  } catch (error) {
+    console.error("Error fetching articles by top keywords:", error);
+    res.status(500).json({ message: "Error fetching articles by top keywords." });
+  }
+};
+
+// Normalize keywords by replacing "_" with spaces
+function normalizeKeywords(keywords) {
+  return keywords.map((keyword) => keyword.replace(/_/g, ' '));
+}
+
+
+// Controller for fetching all data from categorized_keywords
+// Controller for fetching all data from categorized_keywords
+
+// API to fetch all data from the `categorized_keywords` collection
+exports.getAllCategorizedKeywords = async (req, res) => {
+  try {
+    // Access the collection directly using mongoose.connection
+    const categorizedKeywordsCollection = mongoose.connection.collection("categorized_keywords");
+
+    // Fetch all documents in the collection
+    const allData = await categorizedKeywordsCollection.find({}).toArray(); // Use `.toArray()` to fetch results
+
+    // Check if there is any data in the collection
+    if (!allData || allData.length === 0) {
+      return res.status(404).json({ message: "No data found in categorized_keywords." });
+    }
+
+    // Return all fetched data
+    res.status(200).json({
+      message: "Data fetched successfully.",
+      data: allData,
+    });
+  } catch (error) {
+    console.error("Error fetching categorized keywords:", error);
+    res.status(500).json({ message: "Error fetching categorized keywords." });
+  }
+};
+
+

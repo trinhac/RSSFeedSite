@@ -1,37 +1,43 @@
 .trending-wordcloud {
-  margin: 5px;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 600px; /* Limit the word cloud width */
+  text-align: center;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .trending-title {
-  display: inline-block; /* Chỉ bao quanh nội dung chữ */
-  font-size: 36px; 
+  font-size: 42px;
   font-family: "Roboto", Arial, sans-serif;
-  color: #017acd;
+  color: #0078d7; /* Dark blue */
   text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.trending-title:hover {
-  color: #ff9f43; 
-  transition: 0.1s ease-in-out; 
-  text-decoration: underline;
-  cursor: pointer;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #0078d7; /* Underline below title */
+  display: inline-block;
+  /* text-decoration: none; */
 }
 
 .wordcloud {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  gap: 10px; /* Spacing between words */
+  padding: 20px;
+  max-width: 80%; /* Limit word cloud width */
+  margin: 0 auto; /* Center align the word cloud */
 }
 
 .wordcloud-item {
   font-family: 'Roboto', Arial, sans-serif;
   font-weight: bold;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, color 0.3s ease;
+  cursor: pointer;
 }
 
 .wordcloud-item:hover {
-  transform: scale(1.2);
-  text-decoration: underline;
+  transform: scale(1.3) rotate(5deg); /* Slight rotation on hover */
+  /* text-decoration: underline; */
+  z-index: 10; /* Bring to front */
 }

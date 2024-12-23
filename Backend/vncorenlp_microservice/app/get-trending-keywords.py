@@ -210,13 +210,14 @@ def get_keywords_by_time():
 
 
 # Initialize and start the scheduler
-scheduler = BackgroundScheduler()
-scheduler.add_job(precompute_trending_keywords, 'interval', minutes=3)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(precompute_trending_keywords, 'interval', minutes=2)
+# scheduler.start()
 
-# Ensure the scheduler shuts down gracefully
-atexit.register(lambda: scheduler.shutdown())
+# # Ensure the scheduler shuts down gracefully
+# atexit.register(lambda: scheduler.shutdown())
 
 # Run the Flask app
+precompute_trending_keywords()
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=9999)
+    app.run(host="0.0.0.0", port=9998)
