@@ -1,30 +1,77 @@
-# SyndicateAI - RSS Feeds Site
+SyndicateAI - RSS Feeds Site
 
-## How to run this?
-* Add test data to MongoDB Compass
-- Create a *"xml_rss"* database in MongoDB Compass then create a *"test_json_xml"* collection. Import test_data.json in rss_data folder to *test_json_xml* collection.
+How to Run This Project
 
-#### Frontend.
-- `cd Frontend` then run `npm i` after the packages are finished downloading then run `npm start`.
+1. Database Setup (MongoDB Compass)
 
-#### Backend.
-- `cd Backend\server` then run `npm i` after the packages are finished downloading then run `npm start`.
+To run the project, first add test data to MongoDB Compass:
 
-#### VnCoreNLP Microservices
-To run the VnCoreNLP microservices for extracting trending keywords first you need to:
-##### 1. Setup and installation
-- Download the VnCoreNLP repo from this link [VnCoreNLP](https://github.com/vncorenlp/VnCoreNLP)
-- Extract to Desktop, then go to folder `Backend/vncorenlp_microservice` and create a VnCoreNLP folder.
-- Copy the `VnCoreNLP-1.1.1.jar` file and `models` folder and paste to `VnCoreNLP` folder in `vncorenlp_microservice` that have been created before.
-- If you have python installed and already add path to system variable, run following commands:
-```
+Open MongoDB Compass.
+
+Create a new database named xml_rss.
+
+Inside the xml_rss database, create a collection named test_json_xml.
+
+Import the test_data.json file located in the rss_data folder into the test_json_xml collection.
+
+2. Frontend Setup
+
+Navigate to the Frontend directory:
+
+cd Frontend
+
+Install dependencies:
+
+npm install
+
+Start the frontend server:
+
+npm start
+
+3. Backend Setup
+
+Navigate to the backend server directory:
+
+cd Backend/server
+
+Install dependencies:
+
+npm install
+
+Start the backend server:
+
+npm start
+
+VnCoreNLP Microservices Setup
+
+The VnCoreNLP microservices are used to extract trending keywords. Follow these steps to set them up:
+
+1. Setup and Installation
+
+Download the VnCoreNLP repository.
+
+Extract the downloaded file to your Desktop.
+
+Navigate to Backend/vncorenlp_microservice and create a VnCoreNLP folder inside it.
+
+Copy the VnCoreNLP-1.1.1.jar file and the models folder from the extracted repository.
+
+Paste them into the newly created VnCoreNLP folder inside vncorenlp_microservice.
+
+If you have Python installed and it is added to your system’s PATH, run the following commands:
+
 python -m venv env
-./env/Scripts/activate
+./env/Scripts/activate  # For Windows
+source env/bin/activate  # For macOS/Linux
 pip install -r requirements.txt
-```
-*-->Finish setup and installation*
-##### 2. Run the code
-- To run the code, open the terminal via `vncorenlp_microservice` folder run:
-`python ./app/get-trending-keywords.py`
 
-- Open README.md in `vncorenlp_microservice` directory for more information about the API.
+Setup is now complete.
+
+2. Running the Microservice
+
+To run the VnCoreNLP microservice, open a terminal, navigate to the vncorenlp_microservice folder, and execute:
+
+python ./app/get-trending-keywords.py
+
+For more details about the API, refer to the README.md file in the vncorenlp_microservice directory.
+
